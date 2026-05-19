@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RuView 调研报告</title>
+  <link rel="stylesheet" href="../assets/report.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <a class="brand" href="../index.html"><span class="mark" aria-hidden="true"></span><span>Research Hub</span></a>
+      <nav class="nav" aria-label="报告导航">
+        <a href="../index.html">总览</a>
+        <a href="#summary">结论</a>
+        <a href="#need">需要什么</a>
+        <a href="#risk">风险</a>
+        <a href="#sources">来源</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="shell hero-grid">
+        <div>
+          <p class="eyebrow">WiFi Sensing Platform</p>
+          <h1>RuView 调研报告</h1>
+          <p class="lead">RuView 试图把 WiFi CSI 或普通 WiFi RSSI 信号转成空间感知能力：人体存在、运动识别、姿态估计、呼吸/心率、环境指纹和边缘 AI 推理。它不是摄像头方案，但仍然处理高度敏感的人体与空间数据。</p>
+          <div class="pill-row">
+            <span class="pill blue">CSI sensing</span>
+            <span class="pill green">ESP32-S3</span>
+            <span class="pill amber">Beta software</span>
+            <span class="pill rose">privacy risk</span>
+          </div>
+        </div>
+        <figure class="hero-media">
+          <img src="https://raw.githubusercontent.com/ruvnet/RuView/main/assets/v2-screen.png" alt="RuView 可视化界面截图" loading="lazy" onerror="this.style.display='none'">
+          <figcaption class="caption">图片来源：ruvnet/RuView README 中的可视化截图。</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="summary" class="section">
+      <div class="shell">
+        <h2>1. 结论摘要</h2>
+        <div class="grid two">
+          <div class="callout good">
+            <h3>适合定位</h3>
+            <p>研究验证、原型演示、WiFi CSI sensing 实验、ESP32-S3 多节点 demo、Claude/Codex 辅助部署和验证。</p>
+          </div>
+          <div class="callout warn">
+            <h3>不宜直接上线</h3>
+            <p>医疗诊断、执法、安全关键系统、未经同意的人员监控都不应直接使用。README 明确标注 beta，部分能力是目标值或待评估能力。</p>
+          </div>
+        </div>
+        <div class="kpi-row">
+          <div class="kpi"><strong>59,640</strong><span>GitHub stars，调研时 API 返回值</span></div>
+          <div class="kpi"><strong>v0.8.0</strong><span>最新 release，2026-05-14</span></div>
+          <div class="kpi"><strong>Rust</strong><span>主语言，另含 JS/Python/TS/C</span></div>
+          <div class="kpi"><strong>MIT</strong><span>GitHub API 返回许可证</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="shell">
+        <h2>2. 核心能力</h2>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>能力</th><th>说明</th><th>成熟度判断</th></tr></thead>
+            <tbody>
+              <tr><td>Presence / occupancy</td><td>判断房间是否有人、粗略人数、进出状态。</td><td>最容易落地，RSSI 或 CSI 都可做不同层级验证。</td></tr>
+              <tr><td>Motion / activity</td><td>判断静止、移动、跌倒、手势、活动模式。</td><td>需要采样环境和模型校准。</td></tr>
+              <tr><td>Vital signs</td><td>呼吸率、心率、睡眠相关信号。</td><td>需要 CSI 或 mmWave，RSSI 只能做低保真估计。</td></tr>
+              <tr><td>Pose estimation</td><td>17 个 COCO 关键点人体姿态。</td><td>README 明确写了 camera-free proxy label 精度有限，camera-supervised 评估阶段仍有未完成部分。</td></tr>
+              <tr><td>Environment mapping</td><td>房间 RF 指纹、环境变化、异常检测。</td><td>偏研究和实验场景，需要环境基线。</td></tr>
+              <tr><td>Edge intelligence</td><td>ESP32、Cognitum Seed、WASM、Rust 服务端。</td><td>架构丰富，但部署复杂度高。</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="need" class="section">
+      <div class="shell">
+        <h2>3. 需要什么才能用</h2>
+        <div class="grid three">
+          <article class="card">
+            <h3>无硬件体验</h3>
+            <p>Docker 跑模拟数据，适合看 UI、API 和管线，不代表真实 sensing 效果。</p>
+            <pre><code>docker run -p 3000:3000 -p 3001:3001 ruvnet/wifi-densepose:latest</code></pre>
+          </article>
+          <article class="card">
+            <h3>普通 WiFi RSSI</h3>
+            <p>可做粗粒度 presence 和 motion，不能可靠做人体姿态和生命体征。Windows 可能需要管理员权限，Linux 主动扫描可能需要 root。</p>
+          </article>
+          <article class="card">
+            <h3>ESP32-S3 CSI</h3>
+            <p>真实 CSI sensing 需要 ESP32-S3，推荐 3-6 个节点 mesh，加一台 aggregator 主机和固定测试空间。</p>
+          </article>
+        </div>
+
+        <h3 style="margin-top:24px">Claude Code / Codex 插件</h3>
+        <p class="muted">仓库包含 <code>plugins/ruview/</code>，描述为 9 个 skills、7 个 <code>/ruview-*</code> 命令和 3 个 agents。Codex 侧提供 prompt mirror，可复制到 <code>~/.codex/prompts/</code>。</p>
+        <pre><code>/plugin marketplace add ruvnet/RuView
+/plugin install ruview@ruview
+
+# Codex prompt mirror
+cp plugins/ruview/codex/prompts/*.md ~/.codex/prompts/</code></pre>
+      </div>
+    </section>
+
+    <section id="risk" class="section">
+      <div class="shell">
+        <h2>4. 风险分析</h2>
+        <div class="grid two">
+          <div class="callout risk">
+            <h3>隐私风险</h3>
+            <p>不采集视频不等于无隐私风险。人体存在、位置、移动、姿态、呼吸、心率、睡眠和跌倒都可能构成敏感个人数据。</p>
+          </div>
+          <div class="callout risk">
+            <h3>误判风险</h3>
+            <p>医疗、养老、安防、救援场景中，假阴性会延误响应，假阳性会造成干扰。必须有人工复核或多传感器交叉验证。</p>
+          </div>
+          <div class="callout warn">
+            <h3>API 与 token</h3>
+            <p>sensing server、WebSocket、introspection、Seed token、WiFi 配置和 UDP 数据流都需要网络隔离和鉴权。</p>
+          </div>
+          <div class="callout warn">
+            <h3>技术成熟度</h3>
+            <p>仓库快速演进，文档、测试数量和模块说明可能存在版本差异。所有效果指标必须本地复现。</p>
+          </div>
+        </div>
+
+        <h3 style="margin-top:24px">推荐验证路线</h3>
+        <div class="flow">
+          <div class="step"><b>1. Docker</b>确认 UI、API、模拟数据和资源占用。</div>
+          <div class="step"><b>2. RSSI</b>验证普通 WiFi 的粗检测边界。</div>
+          <div class="step"><b>3. CSI</b>采购 ESP32-S3，建立单房间测试集。</div>
+          <div class="step"><b>4. 指标</b>记录误报、漏报、帧率、signal quality 和稳定性。</div>
+          <div class="step"><b>5. 合规</b>评审采集同意、数据保留、访问控制和关停机制。</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="sources" class="section">
+      <div class="shell">
+        <h2>5. 参考来源</h2>
+        <div class="sources">
+          <a class="source-link" href="https://github.com/ruvnet/RuView">GitHub 仓库<span>ruvnet/RuView</span></a>
+          <a class="source-link" href="https://github.com/ruvnet/RuView/blob/main/README.md">README<span>能力、限制、插件</span></a>
+          <a class="source-link" href="https://github.com/ruvnet/RuView/blob/main/docs/user-guide.md">用户指南<span>安装、API、硬件</span></a>
+          <a class="source-link" href="https://github.com/ruvnet/RuView/blob/main/docs/build-guide.md">构建指南<span>验证、源码、Docker</span></a>
+          <a class="source-link" href="https://github.com/ruvnet/RuView/blob/main/plugins/ruview/README.md">Claude Code / Codex 插件<span>skills 与命令</span></a>
+          <a class="source-link" href="https://github.com/ruvnet/RuView/releases/tag/v0.8.0">v0.8.0 release<span>introspection tap</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="shell">由原 Markdown 报告转换并重新排版为 HTML。原始 Markdown 保留在同目录中作为底稿。</div>
+  </footer>
+</body>
+</html>

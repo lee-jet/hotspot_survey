@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Warp 调研报告</title>
+  <link rel="stylesheet" href="../assets/report.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <a class="brand" href="../index.html"><span class="mark" aria-hidden="true"></span><span>Research Hub</span></a>
+      <nav class="nav" aria-label="报告导航">
+        <a href="../index.html">总览</a>
+        <a href="#summary">结论</a>
+        <a href="#use">应用</a>
+        <a href="#risk">风险</a>
+        <a href="#sources">来源</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="shell hero-grid">
+        <div>
+          <p class="eyebrow">Agentic Development Environment</p>
+          <h1>Warp 调研报告</h1>
+          <p class="lead">Warp 已从“现代终端”扩展为面向 Agentic Development 的开发环境：终端、内置编码 Agent、外部 CLI Agent、Warp Drive、Oz 云端 Agent 工作流共同组成一套新型开发入口。</p>
+          <div class="pill-row">
+            <span class="pill blue">Rust native client</span>
+            <span class="pill green">Bring your own agent</span>
+            <span class="pill violet">Warp Drive</span>
+            <span class="pill amber">AGPL v3 + MIT UI crates</span>
+          </div>
+        </div>
+        <figure class="hero-media">
+          <img src="https://github.com/user-attachments/assets/9976b2da-2edd-4604-a36c-8fd53719c6d4" alt="Warp 产品预览图" loading="lazy" onerror="this.style.display='none'">
+          <figcaption class="caption">图片来源：warpdotdev/warp README 中的产品预览。</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="summary" class="section">
+      <div class="shell">
+        <h2>1. 结论摘要</h2>
+        <div class="grid two">
+          <div class="callout good">
+            <h3>适合使用</h3>
+            <p>日常终端增强、多 Agent 开发、命令行上下文管理、团队规则/工作流沉淀，以及希望把 Claude Code、Codex、Gemini CLI 等外部 Agent 放进同一开发入口的团队。</p>
+          </div>
+          <div class="callout warn">
+            <h3>需要谨慎</h3>
+            <p>Warp 运行在终端边界，天然接触 shell、代码、密钥、日志和远程仓库。Agent 模式、云端 Oz、Warp Drive 和同步能力都应纳入权限、数据和供应链审查。</p>
+          </div>
+        </div>
+        <div class="kpi-row">
+          <div class="kpi"><strong>58,936</strong><span>GitHub stars，调研时 API 返回值</span></div>
+          <div class="kpi"><strong>4,580</strong><span>forks</span></div>
+          <div class="kpi"><strong>3,851</strong><span>open issues</span></div>
+          <div class="kpi"><strong>v0.2026.05.13</strong><span>最新 preview release</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="shell">
+        <h2>2. 当前状态</h2>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>项目</th><th>观察</th></tr></thead>
+            <tbody>
+              <tr><td>仓库</td><td><code>warpdotdev/warp</code>，默认分支 <code>master</code>，描述为“born out of the terminal”的 agentic development environment。</td></tr>
+              <tr><td>官网定位</td><td><code>warp.dev</code> 标题为“Warp: The Agentic Development Environment”，说明其是面向 agentic development 的现代终端与云 Agent 平台。</td></tr>
+              <tr><td>语言与架构</td><td>以 Rust 为主，仓库还包含 Shell、Python、Objective-C、PowerShell、HTML、JavaScript、WGSL、Metal 等。<code>WARP.md</code> 描述了 Rust 终端客户端、WarpUI、自定义 UI 框架、AI 集成、Drive、GraphQL、IPC 等模块。</td></tr>
+              <tr><td>许可证</td><td>README 写明 <code>warpui_core</code> 和 <code>warpui</code> 为 MIT，其余仓库代码为 AGPL v3。</td></tr>
+              <tr><td>开放协作</td><td>README 与 CONTRIBUTING 提到 OpenAI 是新开源 Warp 仓库的 founding sponsor，Oz 自动化 issue triage、spec、PR review 等贡献流程。</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="shell">
+        <h2>3. 核心功能</h2>
+        <div class="grid three">
+          <article class="card">
+            <h3>终端与工作区</h3>
+            <p>Warp 仍以终端为入口，提供 shell 会话、命令执行、工作区、设置、跨平台 native 客户端和自定义 WarpUI。</p>
+          </article>
+          <article class="card">
+            <h3>内置 Agent 与外部 Agent</h3>
+            <p>README 明确支持使用 Warp 内置 coding agent，也支持带入 Claude Code、Codex、Gemini CLI 等外部 CLI Agent。</p>
+          </article>
+          <article class="card">
+            <h3>Warp Drive</h3>
+            <p>官网 Drive 页定位为团队和 Agent 的上下文中心，集中 MCP、rules、notebooks、workflows 等共享材料。</p>
+          </article>
+          <article class="card">
+            <h3>Oz for OSS</h3>
+            <p>Oz 用于开源项目管理工作流，包括 issue triage、spec、实现、PR review 和社区协作。Warp 仓库本身就是示范场景。</p>
+          </article>
+          <article class="card">
+            <h3>贡献规格化</h3>
+            <p>CONTRIBUTING 要求 issue 先行，复杂 feature 需要 product spec 和 tech spec，ready labels 决定是否进入实现。</p>
+          </article>
+          <article class="card">
+            <h3>本地构建</h3>
+            <p>开发命令包括 <code>./script/bootstrap</code>、<code>./script/run</code>、<code>./script/presubmit</code>，并通过 cargo/nextest/clippy/fmt 验证。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="use" class="section">
+      <div class="shell">
+        <h2>4. 在 Claude Code / Codex 工作流中的应用</h2>
+        <div class="flow">
+          <div class="step"><b>1. 进入 Warp</b>把 Warp 作为统一终端入口，保留 shell、日志和项目上下文。</div>
+          <div class="step"><b>2. 选择 Agent</b>使用 Warp 内置 Agent，或在 Warp 中运行 Claude Code、Codex、Gemini CLI。</div>
+          <div class="step"><b>3. 绑定规则</b>通过 Warp Drive 或仓库内规则文件集中 MCP、rules、notebooks、workflows。</div>
+          <div class="step"><b>4. 拆解任务</b>对复杂功能先写 issue/spec，再让 Agent 实现或审阅。</div>
+          <div class="step"><b>5. 验证提交</b>运行测试、presubmit、PR review，再进入人工确认。</div>
+        </div>
+
+        <div class="grid two" style="margin-top:16px">
+          <div class="card">
+            <h3>提示词场景</h3>
+            <p>适合让 Agent 分析终端错误、生成 shell 命令、解释日志、按 spec 修改代码、对 PR 做初审、创建技术方案。提示词应明确“只读”“先给计划”“执行前确认”“不要读取密钥”。</p>
+          </div>
+          <div class="card">
+            <h3>输出与存储</h3>
+            <p>输出可能落在终端历史、Warp Drive、仓库 specs、Agent 会话、PR 评论和日志中。涉及密钥、客户数据、私有代码时需要额外审查。</p>
+          </div>
+        </div>
+
+        <pre><code># 本地构建和验证入口
+./script/bootstrap
+./script/run
+./script/presubmit
+
+# 连接本地 warp-server
+cargo run --features with_local_server</code></pre>
+      </div>
+    </section>
+
+    <section id="risk" class="section">
+      <div class="shell">
+        <h2>5. 风险分析</h2>
+        <div class="grid two">
+          <div class="callout risk">
+            <h3>终端权限风险</h3>
+            <p>Warp 和其中运行的 Agent 可以接触 shell、文件系统、git、环境变量和网络。误执行命令、泄露 token、删除文件或提交敏感内容是核心风险。</p>
+          </div>
+          <div class="callout risk">
+            <h3>云端与同步风险</h3>
+            <p>Warp Drive 和 Oz 工作流提升团队协作，但也意味着上下文、规则、notebook、issue、PR 内容可能跨设备或进入云端服务。</p>
+          </div>
+          <div class="callout warn">
+            <h3>许可证边界</h3>
+            <p>AGPL v3 对网络服务和分发场景有强 copyleft 要求。修改并提供服务或再分发前，应由法务确认使用边界。</p>
+          </div>
+          <div class="callout warn">
+            <h3>自动化评审偏差</h3>
+            <p>Oz 自动 triage 和 review 可降低维护成本，但不能替代安全评审、架构评审和业务责任人确认。</p>
+          </div>
+        </div>
+
+        <h3 style="margin-top:24px">建议控制</h3>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>控制项</th><th>做法</th></tr></thead>
+            <tbody>
+              <tr><td>权限</td><td>Agent 默认只读，写入、删除、网络请求、安装依赖、推送代码前必须确认。</td></tr>
+              <tr><td>密钥</td><td>不要把 API key、SSH key、cookie、客户数据写入 Warp Drive、prompt 或 issue。</td></tr>
+              <tr><td>版本</td><td>团队环境固定 Warp 版本，Preview build 只用于测试。</td></tr>
+              <tr><td>审计</td><td>对 Agent 生成的 spec、commit、PR review 保留人工复核流程。</td></tr>
+              <tr><td>许可证</td><td>使用源码、二次分发或托管服务前确认 AGPL v3 义务。</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="sources" class="section">
+      <div class="shell">
+        <h2>6. 参考来源</h2>
+        <div class="sources">
+          <a class="source-link" href="https://www.warp.dev/">Warp 官网<span>warp.dev</span></a>
+          <a class="source-link" href="https://github.com/warpdotdev/warp">GitHub 仓库<span>warpdotdev/warp</span></a>
+          <a class="source-link" href="https://github.com/warpdotdev/warp/blob/master/README.md">README<span>产品定位与安装</span></a>
+          <a class="source-link" href="https://github.com/warpdotdev/warp/blob/master/WARP.md">WARP.md<span>架构与开发命令</span></a>
+          <a class="source-link" href="https://github.com/warpdotdev/warp/blob/master/CONTRIBUTING.md">CONTRIBUTING<span>Oz 与贡献流程</span></a>
+          <a class="source-link" href="https://github.com/warpdotdev/warp/blob/master/SECURITY.md">SECURITY<span>漏洞披露渠道</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="shell">生成于 2026-05-18。未运行本地 Warp 构建或登录测试，结论基于公开页面和仓库资料。</div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>飞书 CLI 与 Claude Code 应用调研报告</title>
+  <link rel="stylesheet" href="../assets/report.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <a class="brand" href="../index.html"><span class="mark" aria-hidden="true"></span><span>Research Hub</span></a>
+      <nav class="nav" aria-label="报告导航">
+        <a href="../index.html">总览</a>
+        <a href="#summary">结论</a>
+        <a href="#claude">Claude Code</a>
+        <a href="#risk">Token 风险</a>
+        <a href="#sources">来源</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="shell hero-grid">
+        <div>
+          <p class="eyebrow">Feishu CLI Research</p>
+          <h1>飞书 CLI 与 Claude Code 应用调研报告</h1>
+          <p class="lead">飞书 CLI 把消息、文档、日历、表格、多维表格、邮件、会议纪要等能力暴露给命令行和 AI Agent，使 Claude Code 可以完成“读飞书、写飞书、整理资料、生成文档、同步表格、发送通知”等办公自动化任务。</p>
+          <div class="pill-row">
+            <span class="pill blue">larksuite/cli</span>
+            <span class="pill green">riba2534/feishu-cli</span>
+            <span class="pill amber">Device Flow</span>
+            <span class="pill rose">Token exposure risk</span>
+          </div>
+        </div>
+        <figure class="hero-media">
+          <img src="https://opengraph.githubassets.com/feishu-cli-larksuite/larksuite/cli" alt="larksuite cli GitHub 预览图" loading="lazy" onerror="this.style.display='none'">
+          <figcaption class="caption">视觉素材：GitHub OpenGraph 预览图，用于辅助识别官方仓库。</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="summary" class="section">
+      <div class="shell">
+        <h2>1. 结论摘要</h2>
+        <div class="grid two">
+          <div class="callout good">
+            <h3>推荐基线</h3>
+            <p>以官方 <code>larksuite/cli</code> 作为通用飞书自动化基线。它覆盖域广、面向 AI Agent、强调结构化输出、dry-run、高风险确认和 OS keychain/加密凭据存储。</p>
+          </div>
+          <div class="callout warn">
+            <h3>补充场景</h3>
+            <p>当重点是 Markdown 与飞书文档高保真互转、Mermaid/PlantUML 图表和 Claude Code 技能化文档工作流时，可补充使用社区 <code>riba2534/feishu-cli</code>。</p>
+          </div>
+        </div>
+        <div class="kpi-row">
+          <div class="kpi"><strong>200+</strong><span>官方 CLI README 标注命令规模</span></div>
+          <div class="kpi"><strong>24</strong><span>官方 AI Agent Skills</span></div>
+          <div class="kpi"><strong>16</strong><span>社区 Claude Code Skills</span></div>
+          <div class="kpi"><strong>30d</strong><span>社区 README 描述 refresh token 常见有效期</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="shell">
+        <h2>2. 两个项目对比</h2>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>项目</th><th>定位</th><th>优势</th><th>注意点</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><code>larksuite/cli</code></td>
+                <td>飞书官方 CLI，面向人类和 AI Agent</td>
+                <td>覆盖 Calendar、IM、Docs、Drive、Markdown、Base、Sheets、Slides、Tasks、Wiki、Mail、Meetings 等；结构化输出；三层命令体系；凭据安全设计更强。</td>
+                <td>权限广时风险很高；写入、删除、权限修改和发送消息必须人工确认。</td>
+              </tr>
+              <tr>
+                <td><code>riba2534/feishu-cli</code></td>
+                <td>社区 CLI，核心是 Markdown 与飞书文档双向转换</td>
+                <td>高保真导入导出、40+ block 类型、Mermaid/PlantUML 转可编辑白板、文档/知识库/表格/消息/邮件/会议纪要技能。</td>
+                <td>用户 token 默认保存到 <code>~/.feishu-cli/token.json</code> 明文 JSON；权限模板较宽；生产环境应隔离。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="claude" class="section">
+      <div class="shell">
+        <h2>3. Claude Code 应用场景</h2>
+        <div class="grid three">
+          <article class="card">
+            <h3>读飞书</h3>
+            <p>读取文档、Wiki、表格、会议纪要或搜索结果，提取摘要、待办、风险点和引用来源。</p>
+          </article>
+          <article class="card">
+            <h3>写飞书</h3>
+            <p>把本地 Markdown 报告上传为飞书文档，或更新现有文档。建议先预览，再写入。</p>
+          </article>
+          <article class="card">
+            <h3>发通知</h3>
+            <p>向指定用户或群发送摘要、卡片或进度提醒。默认先生成消息预览，不直接发送。</p>
+          </article>
+          <article class="card">
+            <h3>同步数据</h3>
+            <p>读取 Sheets/Base，生成 CSV/JSON 分析结果，必要时写回汇总表。</p>
+          </article>
+          <article class="card">
+            <h3>会议整理</h3>
+            <p>读取本周会议纪要，提取行动项，生成周报并创建飞书文档。</p>
+          </article>
+          <article class="card">
+            <h3>权限操作</h3>
+            <p>添加协作者、调整可见性、转移所有权都属于高风险操作，必须二次确认。</p>
+          </article>
+        </div>
+
+        <h3 style="margin-top:24px">认证建议</h3>
+        <pre><code># 官方 CLI
+npx @larksuite/cli@latest install
+lark-cli config init --new
+lark-cli auth login --scope "docx:document:readonly" --no-wait --json
+lark-cli auth check --scope "docx:document:readonly"
+
+# 社区 CLI
+feishu-cli config create-app --save
+feishu-cli auth login --domain search --recommend --no-wait --json
+feishu-cli auth check --scope "search:docs:read"</code></pre>
+      </div>
+    </section>
+
+    <section id="risk" class="section">
+      <div class="shell">
+        <h2>4. Token 与安全风险</h2>
+        <div class="grid two">
+          <div class="callout risk">
+            <h3>个人 User Access Token 泄露</h3>
+            <p>攻击者可在授权 scope 内以该用户身份读取私有文档、消息、邮件、日历、会议纪要，或执行创建、修改、删除、发消息、改权限等操作。若 refresh token 泄露，访问可能持续到授权撤销或 token 失效。</p>
+          </div>
+          <div class="callout risk">
+            <h3>App Secret 泄露</h3>
+            <p>攻击者可换取应用级 token，以机器人或应用身份调用开放平台能力。若应用拥有租户级宽权限，影响面可能大于单个用户 token。</p>
+          </div>
+          <div class="callout warn">
+            <h3>本地文件</h3>
+            <p>官方 CLI 更强调 keychain/加密后端；社区 CLI 的 <code>token.json</code> 为明文 JSON，虽然设置文件权限，仍应视为高敏感文件。</p>
+          </div>
+          <div class="callout warn">
+            <h3>飞书内容注入</h3>
+            <p>文档、消息、邮件、会议纪要都可能包含 prompt injection。Agent 只能把内容当数据，不能让文档内容覆盖用户确认和安全策略。</p>
+          </div>
+        </div>
+
+        <h3 style="margin-top:24px">缓解措施</h3>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>控制项</th><th>建议</th></tr></thead>
+            <tbody>
+              <tr><td>授权</td><td>优先 Device Flow；不要把 raw token 粘进 Claude Code；按任务申请最小 scope。</td></tr>
+              <tr><td>写操作</td><td>使用 <code>--dry-run</code> 或预览；发送、删除、改权限、转移所有权必须用户确认。</td></tr>
+              <tr><td>存储</td><td>不要提交 <code>~/.feishu-cli</code>、<code>~/.lark-cli</code>、<code>.env</code>、导出文档和附件。</td></tr>
+              <tr><td>事故响应</td><td>logout、撤销 OAuth 授权、轮换 App Secret、删除本地 token 和临时导出、审计 API 日志。</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="sources" class="section">
+      <div class="shell">
+        <h2>5. 参考来源</h2>
+        <div class="sources">
+          <a class="source-link" href="https://www.feishu.cn/feishu-cli">飞书 CLI 官网<span>官方介绍</span></a>
+          <a class="source-link" href="https://github.com/larksuite/cli">官方仓库<span>larksuite/cli</span></a>
+          <a class="source-link" href="https://github.com/larksuite/cli/blob/main/README.zh.md">官方中文 README<span>命令与技能</span></a>
+          <a class="source-link" href="https://github.com/riba2534/feishu-cli">社区仓库<span>riba2534/feishu-cli</span></a>
+          <a class="source-link" href="https://github.com/riba2534/feishu-cli/blob/main/README.md">社区 README<span>Markdown 与技能</span></a>
+          <a class="source-link" href="https://github.com/riba2534/feishu-cli/releases/tag/v1.26.0">社区最新发布<span>v1.26.0</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="shell">由原 Markdown 报告转换并重新排版为 HTML。原始 Markdown 保留在同目录中作为底稿。</div>
+  </footer>
+</body>
+</html>

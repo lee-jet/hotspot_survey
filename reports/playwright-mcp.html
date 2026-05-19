@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Playwright MCP 调研报告</title>
+  <link rel="stylesheet" href="../assets/report.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <a class="brand" href="../index.html"><span class="mark" aria-hidden="true"></span><span>Research Hub</span></a>
+      <nav class="nav" aria-label="报告导航">
+        <a href="../index.html">总览</a>
+        <a href="#summary">结论</a>
+        <a href="#tools">工具</a>
+        <a href="#risk">风险</a>
+        <a href="#sources">来源</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="shell hero-grid">
+        <div>
+          <p class="eyebrow">Browser Automation MCP Server</p>
+          <h1>Playwright MCP 调研报告</h1>
+          <p class="lead">microsoft/playwright-mcp 是基于 Playwright 的 MCP server，让 LLM 通过结构化 accessibility snapshot 操作网页，而不是依赖截图或视觉模型。它适合需要持续浏览器状态、页面结构推理和自动化验证的 Agent 工作流。</p>
+          <div class="pill-row">
+            <span class="pill blue">MCP</span>
+            <span class="pill green">Playwright</span>
+            <span class="pill amber">Node 18+</span>
+            <span class="pill rose">Not a security boundary</span>
+          </div>
+        </div>
+        <figure class="hero-media">
+          <img src="https://opengraph.githubassets.com/playwright-mcp-report/microsoft/playwright-mcp" alt="Playwright MCP GitHub 预览图" loading="lazy" onerror="this.style.display='none'">
+          <figcaption class="caption">视觉素材：GitHub OpenGraph 预览图。</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="summary" class="section">
+      <div class="shell">
+        <h2>1. 结论摘要</h2>
+        <div class="grid two">
+          <div class="callout good">
+            <h3>核心价值</h3>
+            <p>给 Claude Code、Codex、VS Code/Copilot、Cursor、Warp、Windsurf 等 MCP 客户端提供浏览器导航、点击、表单、网络、console、截图、storage、PDF、测试断言等能力。</p>
+          </div>
+          <div class="callout warn">
+            <h3>使用边界</h3>
+            <p>README 明确说明 Playwright MCP 不是安全边界。它能打开网页、执行 JavaScript、访问存储和文件，因此必须依靠客户端权限、隔离浏览器 profile、allow/block origins 和 workspace 限制。</p>
+          </div>
+        </div>
+        <div class="kpi-row">
+          <div class="kpi"><strong>32,675</strong><span>GitHub stars，调研时 API 返回值</span></div>
+          <div class="kpi"><strong>v0.0.75</strong><span>最新 release，2026-05-07</span></div>
+          <div class="kpi"><strong>54</strong><span>README 生成的工具名数量</span></div>
+          <div class="kpi"><strong>Apache-2.0</strong><span>License</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="shell">
+        <h2>2. 当前状态</h2>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>项目</th><th>观察</th></tr></thead>
+            <tbody>
+              <tr><td>仓库</td><td><code>microsoft/playwright-mcp</code>，默认分支 <code>main</code>，Apache-2.0。</td></tr>
+              <tr><td>NPM 包</td><td><code>@playwright/mcp</code>，<code>package.json</code> 版本为 <code>0.0.75</code>，入口命令 <code>playwright-mcp</code>。</td></tr>
+              <tr><td>运行要求</td><td>README 要求 Node.js 18+，支持 VS Code、Cursor、Windsurf、Claude Desktop、Goose、Junie 以及其他 MCP client。</td></tr>
+              <tr><td>技术选型</td><td>使用 Playwright accessibility tree，强调结构化数据、轻量和确定性工具应用。</td></tr>
+              <tr><td>与 Playwright CLI</td><td>README 说明 coding agents 可能更适合 CLI+SKILLS，因为 token 更省；MCP 更适合持久状态、富 introspection 和长循环。</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="tools" class="section">
+      <div class="shell">
+        <h2>3. 工具能力</h2>
+        <div class="grid three">
+          <article class="card">
+            <h3>核心交互</h3>
+            <p><code>browser_navigate</code>、<code>browser_click</code>、<code>browser_type</code>、<code>browser_fill_form</code>、<code>browser_select_option</code>、<code>browser_wait_for</code>。</p>
+          </article>
+          <article class="card">
+            <h3>调试与观测</h3>
+            <p><code>browser_snapshot</code>、<code>browser_console_messages</code>、<code>browser_network_requests</code>、<code>browser_start_tracing</code>、<code>browser_stop_tracing</code>。</p>
+          </article>
+          <article class="card">
+            <h3>状态与文件</h3>
+            <p>cookie、localStorage、sessionStorage、storage state、截图、PDF、视频、文件上传/拖放。</p>
+          </article>
+          <article class="card">
+            <h3>测试断言</h3>
+            <p><code>browser_verify_text_visible</code>、<code>browser_verify_element_visible</code>、<code>browser_verify_value</code>、<code>browser_generate_locator</code>。</p>
+          </article>
+          <article class="card">
+            <h3>Vision / DevTools</h3>
+            <p>可通过 <code>--caps</code> 启用 vision、pdf、devtools 等附加能力，默认应按需开启。</p>
+          </article>
+          <article class="card">
+            <h3>远程/独立服务</h3>
+            <p>可用 <code>--port</code> 启动 HTTP/SSE transport，并在 MCP client 中配置 URL。</p>
+          </article>
+        </div>
+
+        <h3 style="margin-top:24px">安装示例</h3>
+        <pre><code># Claude Code
+claude mcp add playwright npx @playwright/mcp@latest
+
+# Codex
+codex mcp add playwright npx "@playwright/mcp@latest"
+
+# 通用 MCP 配置
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": ["@playwright/mcp@latest"]
+    }
+  }
+}</code></pre>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="shell">
+        <h2>4. 配置重点</h2>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>参数</th><th>用途</th><th>建议</th></tr></thead>
+            <tbody>
+              <tr><td><code>--isolated</code></td><td>浏览器 profile 保存在内存，不落盘。</td><td>默认优先，用于降低登录态和缓存泄露。</td></tr>
+              <tr><td><code>--allowed-origins</code> / <code>--blocked-origins</code></td><td>限制浏览器请求的 origin。</td><td>只允许测试目标域名；注意 README 说明它不构成安全边界。</td></tr>
+              <tr><td><code>--allow-unrestricted-file-access</code></td><td>允许访问 workspace root 外文件和 file://。</td><td>默认不要开启，除非明确需要。</td></tr>
+              <tr><td><code>--secrets</code></td><td>用 dotenv 文件做响应中的明文替换。</td><td>只作为便利措施，不是安全机制。</td></tr>
+              <tr><td><code>--headless</code></td><td>无头浏览器。</td><td>CI 和服务端适合；本地调试可用 headed。</td></tr>
+              <tr><td><code>--host</code> / <code>--port</code></td><td>独立 server 监听地址。</td><td>保持 localhost，避免 <code>0.0.0.0</code> 暴露给不可信网络。</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="risk" class="section">
+      <div class="shell">
+        <h2>5. 风险分析</h2>
+        <div class="grid two">
+          <div class="callout risk">
+            <h3>浏览器即权限面</h3>
+            <p>Agent 可访问登录态页面、读取 DOM、点击按钮、提交表单、执行 JavaScript。如果连接到真实个人浏览器或复用 profile，风险显著增加。</p>
+          </div>
+          <div class="callout risk">
+            <h3>文件与存储泄露</h3>
+            <p>上传、下载、storage state、cookie、trace、screenshot、video、PDF 都可能含敏感信息。输出目录应隔离，任务后清理。</p>
+          </div>
+          <div class="callout warn">
+            <h3>网络越界</h3>
+            <p>页面可跳转、重定向、请求第三方资源。allow/block origins 是便利 guardrail，不能代替网络隔离和 MCP client 权限控制。</p>
+          </div>
+          <div class="callout warn">
+            <h3>npx @latest 供应链</h3>
+            <p>README 默认使用 <code>@latest</code>。生产或敏感环境建议固定版本，并在升级前审查 release 和 package-lock。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="sources" class="section">
+      <div class="shell">
+        <h2>6. 参考来源</h2>
+        <div class="sources">
+          <a class="source-link" href="https://github.com/microsoft/playwright-mcp">GitHub 仓库<span>microsoft/playwright-mcp</span></a>
+          <a class="source-link" href="https://github.com/microsoft/playwright-mcp/blob/main/README.md">README<span>安装、工具、配置、安全</span></a>
+          <a class="source-link" href="https://github.com/microsoft/playwright-mcp/blob/main/package.json">package.json<span>版本、依赖、命令</span></a>
+          <a class="source-link" href="https://github.com/microsoft/playwright-mcp/blob/main/config.d.ts">config.d.ts<span>配置类型与注释</span></a>
+          <a class="source-link" href="https://github.com/microsoft/playwright-mcp/releases/tag/v0.0.75">v0.0.75 release<span>最新发布</span></a>
+          <a class="source-link" href="https://www.npmjs.com/package/@playwright/mcp">NPM 包<span>@playwright/mcp</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="shell">生成于 2026-05-18。未安装或运行 Playwright MCP，结论基于公开仓库资料。</div>
+  </footer>
+</body>
+</html>

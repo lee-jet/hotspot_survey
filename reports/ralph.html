@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ralph 调研报告</title>
+  <link rel="stylesheet" href="../assets/report.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <a class="brand" href="../index.html"><span class="mark" aria-hidden="true"></span><span>Research Hub</span></a>
+      <nav class="nav" aria-label="报告导航">
+        <a href="../index.html">总览</a>
+        <a href="#summary">结论</a>
+        <a href="#loop">循环</a>
+        <a href="#risk">风险</a>
+        <a href="#sources">来源</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="shell hero-grid">
+        <div>
+          <p class="eyebrow">Autonomous Agent Loop</p>
+          <h1>Ralph 调研报告</h1>
+          <p class="lead">Ralph 是一个围绕 PRD 的自治编码循环：每轮启动新的 Amp 或 Claude Code 实例，只实现一个最高优先级且未通过的用户故事，通过 git、progress.txt 和 prd.json 保留跨轮记忆。</p>
+          <div class="pill-row">
+            <span class="pill blue">fresh context per iteration</span>
+            <span class="pill green">prd.json</span>
+            <span class="pill amber">progress.txt</span>
+            <span class="pill rose">dangerous permission flags</span>
+          </div>
+        </div>
+        <figure class="hero-media">
+          <img src="https://raw.githubusercontent.com/snarktank/ralph/main/ralph-flowchart.png" alt="Ralph 自动化循环流程图" loading="lazy" onerror="this.style.display='none'">
+          <figcaption class="caption">图片来源：snarktank/ralph 仓库中的流程图。</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="summary" class="section">
+      <div class="shell">
+        <h2>1. 结论摘要</h2>
+        <div class="grid two">
+          <div class="callout good">
+            <h3>核心价值</h3>
+            <p>Ralph 把长任务拆成多个“干净上下文”的短迭代，减少单个上下文过长导致的遗忘和混乱。它适合有清晰 PRD、可验证验收标准、自动化质量门禁的代码库。</p>
+          </div>
+          <div class="callout risk">
+            <h3>核心风险</h3>
+            <p>脚本默认会使用 <code>amp --dangerously-allow-all</code> 或 <code>claude --dangerously-skip-permissions --print</code>。这意味着它本质上是高权限自动编码循环，必须在隔离分支和低风险环境中使用。</p>
+          </div>
+        </div>
+        <div class="kpi-row">
+          <div class="kpi"><strong>19,221</strong><span>GitHub stars，调研时 API 返回值</span></div>
+          <div class="kpi"><strong>1,911</strong><span>forks</span></div>
+          <div class="kpi"><strong>73</strong><span>open issues</span></div>
+          <div class="kpi"><strong>0</strong><span>调研时没有 GitHub latest release</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="shell">
+        <h2>2. 当前状态</h2>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>项目</th><th>观察</th></tr></thead>
+            <tbody>
+              <tr><td>仓库</td><td><code>snarktank/ralph</code>，默认分支 <code>main</code>，MIT License。</td></tr>
+              <tr><td>定位</td><td>README 描述为 autonomous AI agent loop，重复运行 AI coding tools，直到 PRD 中所有条目完成。</td></tr>
+              <tr><td>工具</td><td>支持 Amp CLI 和 Claude Code。Amp 是默认工具，Claude 通过 <code>--tool claude</code> 选择。</td></tr>
+              <tr><td>主要文件</td><td><code>ralph.sh</code>、<code>prompt.md</code>、<code>CLAUDE.md</code>、<code>prd.json</code>、<code>progress.txt</code>、<code>skills/prd</code>、<code>skills/ralph</code>、<code>.claude-plugin</code>。</td></tr>
+              <tr><td>可视化</td><td>仓库包含 <code>flowchart/</code> 和 <code>ralph-flowchart.png</code>，并提供 GitHub Pages 交互流程图。</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="loop" class="section">
+      <div class="shell">
+        <h2>3. Ralph 循环机制</h2>
+        <div class="flow">
+          <div class="step"><b>1. 读取 PRD</b>读取 <code>prd.json</code>，找到 <code>passes: false</code> 的最高优先级故事。</div>
+          <div class="step"><b>2. 新实例执行</b>每轮启动全新的 Amp 或 Claude Code，上下文是干净的。</div>
+          <div class="step"><b>3. 实现单故事</b>只做一个故事，保持变更可控。</div>
+          <div class="step"><b>4. 验证并提交</b>运行 typecheck、lint、test，通过后提交并标记故事通过。</div>
+          <div class="step"><b>5. 写入记忆</b>把经验写入 <code>progress.txt</code> 和 AGENTS/CLAUDE 规则文件。</div>
+        </div>
+
+        <div class="grid two" style="margin-top:16px">
+          <div class="card">
+            <h3>运行方式</h3>
+            <pre><code># Amp 默认
+./scripts/ralph/ralph.sh 10
+
+# Claude Code
+./scripts/ralph/ralph.sh --tool claude 10</code></pre>
+          </div>
+          <div class="card">
+            <h3>技能安装</h3>
+            <pre><code>/plugin marketplace add snarktank/ralph
+/plugin install ralph-skills@ralph-marketplace</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="shell">
+        <h2>4. 输入、输出与适用任务</h2>
+        <div class="grid three">
+          <article class="card">
+            <h3>输入</h3>
+            <p>用户先用 PRD skill 创建 <code>tasks/prd-[feature].md</code>，再用 Ralph skill 转成 <code>prd.json</code>。每个 user story 必须足够小，并有可验证验收标准。</p>
+          </article>
+          <article class="card">
+            <h3>输出</h3>
+            <p>Ralph 会产生代码变更、git commit、更新后的 <code>prd.json</code>、追加式 <code>progress.txt</code>、可能的 AGENTS.md 或 CLAUDE.md 规则更新。</p>
+          </article>
+          <article class="card">
+            <h3>适合任务</h3>
+            <p>适合数据库小迁移、单组件改造、服务端动作、列表过滤、清晰的 UI 小故事。不适合“整个仪表盘”“添加完整认证”“重构全部 API”等大块任务。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="risk" class="section">
+      <div class="shell">
+        <h2>5. 风险分析</h2>
+        <div class="grid two">
+          <div class="callout risk">
+            <h3>危险权限参数</h3>
+            <p><code>ralph.sh</code> 对 Amp 使用 <code>--dangerously-allow-all</code>，对 Claude Code 使用 <code>--dangerously-skip-permissions</code>。如果项目里有删除脚本、部署脚本、生产凭据或外部写入权限，风险很高。</p>
+          </div>
+          <div class="callout risk">
+            <h3>错误会跨轮累积</h3>
+            <p>每轮都会读取 git history、<code>progress.txt</code> 和 <code>prd.json</code>。如果上一轮记录了错误模式或提交了有问题代码，后续轮次可能把错误当成事实继续放大。</p>
+          </div>
+          <div class="callout warn">
+            <h3>PRD 注入与任务污染</h3>
+            <p><code>prd.json</code> 和 <code>progress.txt</code> 是跨轮记忆。如果里面混入不可信指令，可能影响后续 Agent 行为。PRD 应只承载结构化需求，不承载权限绕过指令。</p>
+          </div>
+          <div class="callout warn">
+            <h3>质量门禁薄弱</h3>
+            <p>Ralph 依赖“项目自己的质量检查”。如果没有测试、typecheck 或浏览器验证，它仍可能把坏代码标为通过并提交。</p>
+          </div>
+        </div>
+
+        <h3 style="margin-top:24px">使用建议</h3>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>阶段</th><th>建议</th></tr></thead>
+            <tbody>
+              <tr><td>启动前</td><td>在干净 feature branch、临时工作树或容器中运行；移除生产密钥；设置较小 max iterations。</td></tr>
+              <tr><td>PRD</td><td>每个 story 控制在一个上下文可完成，验收标准必须可测试，UI story 必须要求浏览器验证。</td></tr>
+              <tr><td>执行中</td><td>每轮后审查 commit、diff、progress；发现偏航立即停止循环。</td></tr>
+              <tr><td>完成后</td><td>人工跑完整测试、代码审查、secret scan，再决定是否合并。</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="sources" class="section">
+      <div class="shell">
+        <h2>6. 参考来源</h2>
+        <div class="sources">
+          <a class="source-link" href="https://github.com/snarktank/ralph">GitHub 仓库<span>snarktank/ralph</span></a>
+          <a class="source-link" href="https://github.com/snarktank/ralph/blob/main/README.md">README<span>定位、安装、工作流</span></a>
+          <a class="source-link" href="https://github.com/snarktank/ralph/blob/main/ralph.sh">ralph.sh<span>循环脚本与权限参数</span></a>
+          <a class="source-link" href="https://github.com/snarktank/ralph/blob/main/CLAUDE.md">CLAUDE.md<span>Claude Code 迭代提示</span></a>
+          <a class="source-link" href="https://github.com/snarktank/ralph/blob/main/skills/prd/SKILL.md">PRD skill<span>需求文档生成</span></a>
+          <a class="source-link" href="https://github.com/snarktank/ralph/blob/main/skills/ralph/SKILL.md">Ralph skill<span>PRD 转 prd.json</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="shell">生成于 2026-05-18。未运行 Ralph 循环，结论基于公开仓库资料。</div>
+  </footer>
+</body>
+</html>

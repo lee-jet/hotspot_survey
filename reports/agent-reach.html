@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Agent Reach 调研报告</title>
+  <link rel="stylesheet" href="../assets/report.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <a class="brand" href="../index.html"><span class="mark" aria-hidden="true"></span><span>Research Hub</span></a>
+      <nav class="nav" aria-label="报告导航">
+        <a href="../index.html">总览</a>
+        <a href="#summary">结论</a>
+        <a href="#channels">渠道</a>
+        <a href="#risk">风险</a>
+        <a href="#sources">来源</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="shell hero-grid">
+        <div>
+          <p class="eyebrow">Internet Access Scaffolding for Agents</p>
+          <h1>Agent Reach 调研报告</h1>
+          <p class="lead">Agent Reach 是一个给 AI Agent 安装互联网读取与搜索能力的 Python CLI。它不是统一代理层，而是 installer、doctor 和配置脚手架：装好后，Agent 直接调用 yt-dlp、gh CLI、twitter-cli、rdt-cli、xhs-cli、mcporter 等上游工具。</p>
+          <div class="pill-row">
+            <span class="pill blue">Python 3.10+</span>
+            <span class="pill green">MIT</span>
+            <span class="pill amber">Cookie auth</span>
+            <span class="pill rose">Scraping risk</span>
+          </div>
+        </div>
+        <figure class="hero-media">
+          <img src="https://opengraph.githubassets.com/agent-reach-report/Panniantong/Agent-Reach" alt="Agent Reach GitHub 预览图" loading="lazy" onerror="this.style.display='none'">
+          <figcaption class="caption">视觉素材：GitHub OpenGraph 预览图。</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="summary" class="section">
+      <div class="shell">
+        <h2>1. 结论摘要</h2>
+        <div class="grid two">
+          <div class="callout good">
+            <h3>适合场景</h3>
+            <p>让 Claude Code、Cursor、OpenClaw、Windsurf、Codex 等能运行命令行的 Agent 快速获得网页读取、YouTube 字幕、GitHub、RSS、社媒搜索和平台内容读取能力。</p>
+          </div>
+          <div class="callout risk">
+            <h3>核心风险</h3>
+            <p>Agent Reach 会引导安装多个上游抓取/CLI/MCP 工具，并可能保存 Cookie、token、代理和 API key。Cookie 等同登录态，泄露后影响可能接近账号完整接管。</p>
+          </div>
+        </div>
+        <div class="kpi-row">
+          <div class="kpi"><strong>19,813</strong><span>GitHub stars，调研时 API 返回值</span></div>
+          <div class="kpi"><strong>v1.4.0</strong><span>最新 release，2026-03-31</span></div>
+          <div class="kpi"><strong>15+</strong><span>README/doctor 语境中的平台渠道规模</span></div>
+          <div class="kpi"><strong>600</strong><span>配置文件 Unix 权限目标</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="shell">
+        <h2>2. 当前状态</h2>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>项目</th><th>观察</th></tr></thead>
+            <tbody>
+              <tr><td>仓库</td><td><code>Panniantong/Agent-Reach</code>，默认分支 <code>main</code>，MIT License。</td></tr>
+              <tr><td>定位</td><td>GitHub 描述为给 AI Agent 互联网读取能力，支持 Twitter、Reddit、YouTube、GitHub、Bilibili、小红书等，且强调 one CLI、zero API fees。</td></tr>
+              <tr><td>语言与包</td><td>主要为 Python，<code>pyproject.toml</code> 中包名 <code>agent-reach</code>，需要 Python 3.10+，入口命令为 <code>agent-reach</code>。</td></tr>
+              <tr><td>版本</td><td><code>pyproject.toml</code> 为 <code>1.4.0</code>；GitHub latest release 为 <code>v1.4.0</code>；README 与 CLAUDE.md 的部分版本描述可能存在滞后。</td></tr>
+              <tr><td>配置</td><td>源码显示默认配置位于 <code>~/.agent-reach/config.yaml</code>，保存时尝试用 <code>0o600</code> 权限创建。</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="channels" class="section">
+      <div class="shell">
+        <h2>3. 核心能力与渠道</h2>
+        <div class="grid three">
+          <article class="card">
+            <h3>零配置读取</h3>
+            <p>网页通过 Jina Reader，YouTube/B站基础能力通过 yt-dlp，GitHub 公开信息通过 gh CLI，RSS 通过 feedparser。</p>
+          </article>
+          <article class="card">
+            <h3>登录后解锁</h3>
+            <p>Twitter/X、小红书、雪球、Reddit 等可能需要 Cookie、浏览器登录态或专用 CLI 登录。README 建议使用专用小号。</p>
+          </article>
+          <article class="card">
+            <h3>MCP/外部服务</h3>
+            <p>Exa、mcporter、douyin-mcp-server、linkedin-scraper-mcp 等作为可插拔上游工具，Agent Reach 负责安装、检测和配置。</p>
+          </article>
+        </div>
+
+        <h3 style="margin-top:24px">主要命令</h3>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>命令</th><th>用途</th></tr></thead>
+            <tbody>
+              <tr><td><code>agent-reach install</code></td><td>安装核心工具和可选渠道，支持 <code>--env</code>、<code>--safe</code>、<code>--dry-run</code>、<code>--channels</code>。</td></tr>
+              <tr><td><code>agent-reach doctor</code></td><td>检查各平台可用性，并提示哪些渠道还需要配置。</td></tr>
+              <tr><td><code>agent-reach configure</code></td><td>配置 proxy、GitHub token、Groq key、Twitter/XHS cookies，或从浏览器提取 Cookie。</td></tr>
+              <tr><td><code>agent-reach skill</code></td><td>把 Agent Reach 的技能文件注册到 Agent skills 目录。</td></tr>
+              <tr><td><code>agent-reach uninstall</code></td><td>移除配置、token、skill 文件，支持 dry-run 和 keep-config。</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <pre><code># 安全预览
+agent-reach install --env=auto --dry-run
+
+# 安全模式，不自动改系统
+agent-reach install --env=auto --safe
+
+# 安装特定渠道
+agent-reach install --env=auto --channels=twitter,weibo</code></pre>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="shell">
+        <h2>4. 在 Agent 工作流中的应用</h2>
+        <div class="flow">
+          <div class="step"><b>1. 安装</b>让 Agent 按 install.md 执行，但优先 dry-run 或 safe mode。</div>
+          <div class="step"><b>2. 诊断</b>运行 <code>agent-reach doctor</code>，确认哪些渠道已可用。</div>
+          <div class="step"><b>3. 配置</b>需要 Cookie 或 key 的渠道由用户提供凭据。</div>
+          <div class="step"><b>4. 调用上游</b>Agent 根据 SKILL.md 直接调用 yt-dlp、gh、twitter、rdt 等。</div>
+          <div class="step"><b>5. 清理</b>任务结束后审查配置和临时文件，必要时 uninstall 或撤销 Cookie。</div>
+        </div>
+        <div class="grid two" style="margin-top:16px">
+          <div class="card"><p>提示词示例：帮我安装 Agent Reach，但先使用 <code>--dry-run</code> 列出会安装什么，不要自动输入 sudo，不要修改当前项目目录。</p></div>
+          <div class="card"><p>提示词示例：用 Agent Reach 读取这个 YouTube 视频字幕和 GitHub 仓库 README，输出引用链接和摘要，不要登录任何平台。</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="risk" class="section">
+      <div class="shell">
+        <h2>5. 风险分析</h2>
+        <div class="grid two">
+          <div class="callout risk">
+            <h3>Cookie 和账号风险</h3>
+            <p>Twitter、小红书、雪球等 Cookie 能代表登录态。泄露后可能读取私信/关注/收藏、发帖、点赞、评论或触发平台风控。README 也明确提醒封号和使用小号。</p>
+          </div>
+          <div class="callout risk">
+            <h3>安装链过长</h3>
+            <p>Agent Reach 会安装或引导安装多个第三方 CLI、MCP server、Node/Python 包。每个上游都是供应链风险源，且版本变化会影响可用性。</p>
+          </div>
+          <div class="callout warn">
+            <h3>平台条款和反爬</h3>
+            <p>“免费无 API Key”往往依赖抓取、Cookie 或网页自动化，可能违反平台条款，导致账号限制、IP 封禁或法律/合规问题。</p>
+          </div>
+          <div class="callout warn">
+            <h3>工作区污染</h3>
+            <p>install.md 明确要求不要在 Agent workspace 克隆仓库或创建文件，应使用 <code>~/.agent-reach/</code> 和 <code>/tmp/</code>，这点需要严格执行。</p>
+          </div>
+        </div>
+
+        <h3 style="margin-top:24px">建议控制</h3>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>控制项</th><th>建议</th></tr></thead>
+            <tbody>
+              <tr><td>执行权限</td><td>先 dry-run；禁止 Agent 自行 sudo；安装前展示将安装的包和来源。</td></tr>
+              <tr><td>账号</td><td>使用专用小号和最小权限；不要使用主账号 Cookie；任务后撤销 Cookie 或重新登录。</td></tr>
+              <tr><td>凭据</td><td>不要把 Cookie/token 写入报告、git、prompt 历史；检查 <code>~/.agent-reach/config.yaml</code> 权限。</td></tr>
+              <tr><td>合规</td><td>明确使用平台内容的授权、版权和 ToS 边界；避免批量抓取和敏感个人信息采集。</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="sources" class="section">
+      <div class="shell">
+        <h2>6. 参考来源</h2>
+        <div class="sources">
+          <a class="source-link" href="https://github.com/Panniantong/Agent-Reach">GitHub 仓库<span>Panniantong/Agent-Reach</span></a>
+          <a class="source-link" href="https://github.com/Panniantong/Agent-Reach/blob/main/README.md">README<span>平台、设计、安全</span></a>
+          <a class="source-link" href="https://github.com/Panniantong/Agent-Reach/blob/main/docs/install.md">安装指南<span>Agent 边界与流程</span></a>
+          <a class="source-link" href="https://github.com/Panniantong/Agent-Reach/blob/main/pyproject.toml">pyproject.toml<span>包信息与依赖</span></a>
+          <a class="source-link" href="https://github.com/Panniantong/Agent-Reach/blob/main/agent_reach/config.py">config.py<span>配置路径与权限</span></a>
+          <a class="source-link" href="https://github.com/Panniantong/Agent-Reach/blob/main/SECURITY.md">SECURITY.md<span>漏洞披露范围</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="shell">生成于 2026-05-18。未安装或运行 Agent Reach，结论基于公开仓库资料。</div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Planning with Files 调研报告</title>
+  <link rel="stylesheet" href="../assets/report.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <a class="brand" href="../index.html"><span class="mark" aria-hidden="true"></span><span>Research Hub</span></a>
+      <nav class="nav" aria-label="报告导航">
+        <a href="../index.html">总览</a>
+        <a href="#summary">结论</a>
+        <a href="#workflow">流程</a>
+        <a href="#risk">风险</a>
+        <a href="#sources">来源</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="shell hero-grid">
+        <div>
+          <p class="eyebrow">Persistent Planning Skill</p>
+          <h1>Planning with Files 调研报告</h1>
+          <p class="lead">这是一个面向 Claude Code、Codex 和多 IDE Agent 的文件化规划技能。它把有限上下文窗口中的目标、发现和进展落盘到 Markdown 文件，让长任务在清空上下文、压缩上下文或多轮工作后仍能恢复。</p>
+          <div class="pill-row">
+            <span class="pill blue">task_plan.md</span>
+            <span class="pill green">findings.md</span>
+            <span class="pill amber">progress.md</span>
+            <span class="pill violet">hooks + attestation</span>
+          </div>
+        </div>
+        <figure class="hero-media">
+          <img src="https://raw.githubusercontent.com/OthmanAdi/planning-with-files/master/media/banner.png" alt="Planning with Files 仓库横幅" loading="lazy" onerror="this.style.display='none'">
+          <figcaption class="caption">图片来源：OthmanAdi/planning-with-files README 横幅。</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="summary" class="section">
+      <div class="shell">
+        <h2>1. 结论摘要</h2>
+        <div class="grid two">
+          <div class="callout good">
+            <h3>核心价值</h3>
+            <p>把 Agent 的“工作记忆”从对话上下文迁移到项目文件：计划、研究发现、执行日志可被反复读取、修改、审计和提交，适合复杂研发、调研、迁移、修复和多阶段任务。</p>
+          </div>
+          <div class="callout warn">
+            <h3>关键边界</h3>
+            <p>它提升的是任务连续性，不是自动保证质量。计划文件也可能被污染、过期或泄露敏感信息，所以要配合 attestation、git diff、人工复核和敏感信息清理。</p>
+          </div>
+        </div>
+        <div class="kpi-row">
+          <div class="kpi"><strong>21,565</strong><span>GitHub stars，调研时 API 返回值</span></div>
+          <div class="kpi"><strong>1,905</strong><span>forks</span></div>
+          <div class="kpi"><strong>v2.38.1</strong><span>最新 release，2026-05-16</span></div>
+          <div class="kpi"><strong>17+</strong><span>README 标注支持的平台/IDE</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="shell">
+        <h2>2. 当前状态</h2>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>项目</th><th>观察</th></tr></thead>
+            <tbody>
+              <tr><td>仓库</td><td><code>OthmanAdi/planning-with-files</code>，默认分支 <code>master</code>，MIT License。</td></tr>
+              <tr><td>定位</td><td>README 描述为 Claude Code skill，实现 Manus 风格的 persistent markdown planning。</td></tr>
+              <tr><td>最新版本</td><td><code>v2.38.1</code>，修复 Claude Code skill picker 中 description 被 YAML 文档分隔符截断的问题，将 plan 数据分隔符从 <code>---</code> 改为 <code>===</code>。</td></tr>
+              <tr><td>语言</td><td>主要为 Python、Shell、PowerShell，说明它更像技能/钩子/脚本集合，不是传统应用。</td></tr>
+              <tr><td>平台</td><td>仓库包含 <code>.claude-plugin</code>、<code>.codex</code>、<code>.cursor</code>、<code>.gemini</code>、<code>.opencode</code>、<code>.kiro</code>、<code>.pi</code> 等适配目录。</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="workflow" class="section">
+      <div class="shell">
+        <h2>3. 工作机制</h2>
+        <div class="flow">
+          <div class="step"><b>1. 创建计划</b>复杂任务开始前生成 <code>task_plan.md</code>、<code>findings.md</code>、<code>progress.md</code>。</div>
+          <div class="step"><b>2. 读取上下文</b>每次决策前重读计划，避免上下文窗口遗忘目标。</div>
+          <div class="step"><b>3. 工具前注入</b>hooks 在用户消息或工具调用前注入计划片段和近期进展。</div>
+          <div class="step"><b>4. 执行后记录</b>写入或执行后提醒更新进展、错误、产物和阶段状态。</div>
+          <div class="step"><b>5. 完成检查</b>Stop hook 检查计划是否完成，不完整时提醒继续。</div>
+        </div>
+
+        <div class="grid three" style="margin-top:16px">
+          <article class="card">
+            <h3>task_plan.md</h3>
+            <p>记录阶段、目标、状态、决策和错误，是任务执行的主控清单。</p>
+          </article>
+          <article class="card">
+            <h3>findings.md</h3>
+            <p>记录调研发现、代码定位、外部来源和关键证据，避免重复搜索。</p>
+          </article>
+          <article class="card">
+            <h3>progress.md</h3>
+            <p>记录每轮做了什么、测试结果、失败原因和下一步，便于 session recovery。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="shell">
+        <h2>4. 安装与使用</h2>
+        <div class="grid two">
+          <div class="card">
+            <h3>Claude Code</h3>
+            <pre><code>/plugin marketplace add OthmanAdi/planning-with-files
+/plugin install planning-with-files@planning-with-files</code></pre>
+          </div>
+          <div class="card">
+            <h3>Codex</h3>
+            <p>Codex 集成包含 <code>.codex/skills/planning-with-files/</code>、<code>.codex/hooks.json</code> 和 hook 脚本。需要在 <code>~/.codex/config.toml</code> 中启用 <code>codex_hooks = true</code>。官方文档说明当前 Codex hooks 在 Windows 上不可用。</p>
+          </div>
+        </div>
+
+        <h3 style="margin-top:24px">适用提示词</h3>
+        <div class="grid two">
+          <div class="card"><p>“为这个迁移任务创建文件化计划，拆成阶段并在每阶段结束后更新 progress.md。”</p></div>
+          <div class="card"><p>“先读取 task_plan.md、findings.md、progress.md，再继续上次调研，不要重复已经完成的搜索。”</p></div>
+          <div class="card"><p>“执行前检查计划 attestation，如果 task_plan.md 被改过，先暂停并报告差异。”</p></div>
+          <div class="card"><p>“每两次搜索后把关键发现写入 findings.md，并在最终报告引用来源。”</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="risk" class="section">
+      <div class="shell">
+        <h2>5. 风险分析</h2>
+        <div class="grid two">
+          <div class="callout risk">
+            <h3>计划文件注入</h3>
+            <p>计划文件会被 hooks 注入给 Agent。若文件内混入“忽略规则、泄露密钥、执行删除”等指令，就可能成为 prompt injection 载体。v2.37+ 的 SHA-256 attestation 与 v2.38.1 的分隔符修复是重要缓解，但不能替代人工审查。</p>
+          </div>
+          <div class="callout risk">
+            <h3>Hook 脚本执行</h3>
+            <p>技能声明允许 <code>Read Write Edit Bash Glob Grep</code>，且生命周期 hooks 会执行 shell/PowerShell/Python 脚本。安装前应审查脚本，团队环境应通过代码审查合入。</p>
+          </div>
+          <div class="callout warn">
+            <h3>敏感信息落盘</h3>
+            <p>findings 和 progress 很容易记录 token、路径、客户名、日志、错误输出和内部 URL。它们位于项目目录，可能被 git add 或同步工具带走。</p>
+          </div>
+          <div class="callout warn">
+            <h3>过度相信计划</h3>
+            <p>文件化计划会让 Agent 更“坚定”，但旧计划可能已经不适配当前代码。恢复会话时必须结合 <code>git diff</code>、测试和最新用户指令重新校准。</p>
+          </div>
+        </div>
+
+        <h3 style="margin-top:24px">控制建议</h3>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>风险</th><th>建议</th></tr></thead>
+            <tbody>
+              <tr><td>prompt injection</td><td>把计划内容视为数据，不允许计划文件覆盖系统/用户指令；启用 <code>/plan-attest</code> 或等价哈希确认。</td></tr>
+              <tr><td>泄露</td><td>把 <code>task_plan.md</code>、<code>findings.md</code>、<code>progress.md</code> 加入敏感信息扫描；不记录 raw token。</td></tr>
+              <tr><td>hook 冲突</td><td>Codex 全局 hooks 与项目 hooks 不要重复安装；已有 hooks.json 时手动 merge。</td></tr>
+              <tr><td>供应链</td><td>固定 release 版本，插件升级走 PR 审查，不直接覆盖全局配置。</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="sources" class="section">
+      <div class="shell">
+        <h2>6. 参考来源</h2>
+        <div class="sources">
+          <a class="source-link" href="https://github.com/OthmanAdi/planning-with-files">GitHub 仓库<span>OthmanAdi/planning-with-files</span></a>
+          <a class="source-link" href="https://github.com/OthmanAdi/planning-with-files/blob/master/README.md">README<span>定位、版本、平台</span></a>
+          <a class="source-link" href="https://github.com/OthmanAdi/planning-with-files/blob/master/docs/installation.md">安装文档<span>Claude Code plugin</span></a>
+          <a class="source-link" href="https://github.com/OthmanAdi/planning-with-files/blob/master/docs/codex.md">Codex 文档<span>skills + hooks</span></a>
+          <a class="source-link" href="https://github.com/OthmanAdi/planning-with-files/blob/master/skills/planning-with-files/SKILL.md">SKILL.md<span>hook 与核心规则</span></a>
+          <a class="source-link" href="https://github.com/OthmanAdi/planning-with-files/releases/tag/v2.38.1">v2.38.1 release<span>分隔符修复</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="shell">生成于 2026-05-18。未安装插件或运行 hooks，结论基于公开仓库资料。</div>
+  </footer>
+</body>
+</html>

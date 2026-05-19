@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="AI Agent 与开发者工具调研中心：系统梳理飞书 CLI、WiFi 感知、终端 Agent、长任务记忆、自治编码循环、互联网读取、浏览器自动化与工程化技能的核心能力、应用场景与安全风险。">
+  <meta name="theme-color" content="#0ea5e9">
+  <meta property="og:title" content="Research Hub · AI Agent 与开发者工具调研中心">
+  <meta property="og:description" content="系统拆解 AI Agent 与开发者工具的能力、应用与风险。">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%230369a1'/%3E%3Cpath d='M9 21V11l7 5 7-5v10' stroke='white' stroke-width='2.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <title>Research Hub · AI Agent 与开发者工具调研中心</title>
+  <link rel="stylesheet" href="assets/report.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <a class="brand" href="index.html">
+        <span class="mark" aria-hidden="true"></span>
+        <span>Research Hub</span>
+        <span class="brand-sub">/ AI Agent &amp; DevTools</span>
+      </a>
+      <nav class="nav" aria-label="报告导航">
+        <a href="#reports">报告</a>
+        <a href="#themes">主题地图</a>
+        <a href="#method">研究边界</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- ───────── Hero ───────── -->
+    <section class="hero">
+      <div class="bg-grid" aria-hidden="true"></div>
+      <div class="shell hero-grid">
+        <div>
+          <p class="eyebrow">AI Agent · DevTools Research</p>
+          <h1>把 AI Agent 工具的<br><span class="accent">能力、应用与风险</span>讲清楚</h1>
+          <p class="lead">本中心整理 8 个调研对象：飞书 CLI、WiFi 感知、终端 Agent、长任务记忆、自治编码循环、互联网读取、浏览器自动化、工程化技能。每份报告按统一结构产出 —— <strong>结论 → 核心能力 → 应用场景 → 风险与缓解 → 可追溯来源</strong>。</p>
+          <div class="pill-row">
+            <span class="pill blue">AI Agent</span>
+            <span class="pill teal">DevTools</span>
+            <span class="pill amber">安全风险</span>
+            <span class="pill violet">工程化</span>
+          </div>
+
+          <div class="pillars" role="list">
+            <div class="pillar reveal" data-delay="1" role="listitem">
+              <div class="ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <h3>风险优先</h3>
+              <p>Token、Cookie、Prompt Injection、供应链一项不漏。</p>
+            </div>
+            <div class="pillar reveal" data-delay="2" role="listitem">
+              <div class="ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+              </div>
+              <h3>来源可追溯</h3>
+              <p>每条结论都标注 GitHub / 官网 / Release 出处。</p>
+            </div>
+            <div class="pillar reveal" data-delay="3" role="listitem">
+              <div class="ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><polyline points="21 3 21 9 15 9"/></svg>
+              </div>
+              <h3>可复验</h3>
+              <p>给出复现命令、配置示例与可执行链路。</p>
+            </div>
+            <div class="pillar reveal" data-delay="4" role="listitem">
+              <div class="ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+              </div>
+              <h3>横向对比</h3>
+              <p>官方版本 vs 社区版本、能力矩阵、风险等级一目了然。</p>
+            </div>
+          </div>
+        </div>
+
+        <figure class="hero-media" aria-hidden="true">
+          <svg viewBox="0 0 640 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="主题地图插画">
+            <defs>
+              <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#082f49"/>
+                <stop offset="1" stop-color="#0c1929"/>
+              </linearGradient>
+              <linearGradient id="lineGrad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="#0ea5e9"/>
+                <stop offset="1" stop-color="#6d28d9"/>
+              </linearGradient>
+              <radialGradient id="dotGlow" cx="0.5" cy="0.5" r="0.5">
+                <stop offset="0" stop-color="#7dd3fc"/>
+                <stop offset="1" stop-color="#0ea5e9" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+            <rect width="640" height="400" fill="url(#bgGrad)"/>
+            <g opacity="0.18" stroke="#bae6fd" stroke-width="0.5">
+              <path d="M0 80 H640 M0 160 H640 M0 240 H640 M0 320 H640"/>
+              <path d="M80 0 V400 M160 0 V400 M240 0 V400 M320 0 V400 M400 0 V400 M480 0 V400 M560 0 V400"/>
+            </g>
+            <g fill="none" stroke="url(#lineGrad)" stroke-width="2">
+              <path d="M60 320 Q 180 200 320 220 T 580 90"/>
+              <path d="M60 360 Q 200 280 320 300 T 580 200" opacity="0.6"/>
+              <path d="M60 380 Q 220 340 320 350 T 580 280" opacity="0.35"/>
+            </g>
+            <g>
+              <circle cx="320" cy="220" r="40" fill="url(#dotGlow)" class="pulse"/>
+              <circle cx="320" cy="220" r="8" fill="#7dd3fc"/>
+              <circle cx="120" cy="300" r="6" fill="#7dd3fc" class="pulse pulse-2"/>
+              <circle cx="500" cy="140" r="6" fill="#a78bfa" class="pulse pulse-3"/>
+              <circle cx="240" cy="120" r="5" fill="#34d399"/>
+              <circle cx="420" cy="260" r="5" fill="#fbbf24" class="pulse pulse-2"/>
+              <circle cx="180" cy="180" r="4" fill="#fb7185"/>
+            </g>
+            <g font-family="JetBrains Mono, monospace" font-size="11" fill="#bae6fd" opacity="0.85">
+              <text x="20" y="28">// research-hub.map</text>
+              <text x="20" y="46" opacity="0.6">8 tools · 4 risk classes · 30+ sources</text>
+              <text x="340" y="218" fill="#7dd3fc" font-weight="700">hub</text>
+              <text x="130" y="298" fill="#7dd3fc">feishu-cli</text>
+              <text x="510" y="142" fill="#a78bfa">warp</text>
+              <text x="250" y="118" fill="#34d399">mcp</text>
+              <text x="430" y="262" fill="#fbbf24">ralph</text>
+              <text x="190" y="178" fill="#fb7185">ruview</text>
+            </g>
+          </svg>
+          <figcaption class="caption">主题地图 · 节点表示工具，曲线表示能力—风险耦合关系。</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ───────── KPI strip ───────── -->
+    <section class="section" style="padding-top: 24px;">
+      <div class="shell">
+        <div class="kpi-row">
+          <div class="kpi reveal" data-delay="1"><strong>8</strong><span>调研对象（工具 / 框架 / 实践）</span></div>
+          <div class="kpi reveal" data-delay="2"><strong>4</strong><span>大风险类别（Token / Cookie / Injection / 供应链）</span></div>
+          <div class="kpi reveal" data-delay="3"><strong>30+</strong><span>引用来源（官网 · GitHub · Release）</span></div>
+          <div class="kpi reveal" data-delay="4"><strong>5</strong><span>段式统一结构（结论 → 能力 → 应用 → 风险 → 来源）</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────── Reports (Bento) ───────── -->
+    <section id="reports" class="section">
+      <div class="shell">
+        <div class="section-head reveal">
+          <h2><span class="num">01</span>调研报告入口</h2>
+          <span class="meta">8 reports · uniform grid</span>
+        </div>
+        <p class="muted reveal" data-delay="1" style="margin: 0 0 22px; max-width: 760px;">大卡片为高优先级与高风险议题，小卡片为辅助专题。右下角图标表示主题类型。</p>
+
+        <div class="grid four">
+
+          <!-- Ralph · · 自治循环 · high risk -->
+          <a class="report-card themed theme-ralph reveal" data-delay="1" href="reports/ralph.html" aria-label="Ralph 调研报告">
+            <div class="thumb">
+              <img src="https://raw.githubusercontent.com/snarktank/ralph/main/ralph-flowchart.png" alt="Ralph preview" loading="lazy" onerror="this.style.display='none'">
+              <span class="topic">自治循环</span>
+              <div class="glyph" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10"/><path d="M20.49 15a9 9 0 0 1-14.85 3.36L1 14"/></svg>
+              </div>
+            </div>
+            <div class="report-card-body">
+              <h3>Ralph · 自治 AI agent loop</h3>
+              <p>PRD → JSON 任务、fresh context 隔离、git/progress 记忆、危险权限参数与质量门禁；最具影响力，也最需要风险护栏。</p>
+              <div class="pill-row"><span class="pill violet">Agent loop</span><span class="pill rose">High risk</span></div>
+              <div class="row"><span class="read">阅读报告</span></div>
+            </div>
+          </a>
+
+          <!-- Warp · · 终端 Agent -->
+          <a class="report-card themed theme-warp reveal" data-delay="2" href="reports/warp.html" aria-label="Warp 调研报告">
+            <div class="thumb">
+              <img src="https://github.com/user-attachments/assets/9976b2da-2edd-4604-a36c-8fd53719c6d4" alt="Warp preview" loading="lazy" onerror="this.style.display='none'">
+              <span class="topic">终端 Agent</span>
+              <div class="glyph" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+              </div>
+            </div>
+            <div class="report-card-body">
+              <h3>Warp</h3>
+              <p>Agentic Development Environment：终端、Warp Drive、Oz、开源贡献流程、许可证与云端上下文风险。</p>
+              <div class="pill-row"><span class="pill blue">Terminal</span><span class="pill violet">Oz</span></div>
+              <div class="row"><span class="read">阅读报告</span></div>
+            </div>
+          </a>
+
+          <!-- Feishu CLI · · 办公自动化 -->
+          <a class="report-card themed theme-feishu reveal" data-delay="3" href="reports/feishu-cli.html" aria-label="飞书 CLI 与 Claude Code 报告">
+            <div class="thumb">
+              <img src="https://opengraph.githubassets.com/feishu-cli-hub/larksuite/cli" alt="larksuite/cli GitHub preview" loading="lazy" onerror="this.style.display='none'">
+              <span class="topic">办公自动化</span>
+              <div class="glyph" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              </div>
+            </div>
+            <div class="report-card-body">
+              <h3>飞书 CLI 与 Claude Code</h3>
+              <p>官方 <code>larksuite/cli</code> 与社区 <code>riba2534/feishu-cli</code> 对比：文档、Sheets/Base、消息卡片与 Token 风险。</p>
+              <div class="pill-row"><span class="pill blue">Feishu</span><span class="pill rose">Token risk</span></div>
+              <div class="row"><span class="read">阅读报告</span></div>
+            </div>
+          </a>
+
+          <!-- Playwright MCP · · 浏览器自动化 -->
+          <a class="report-card themed theme-playwright reveal" data-delay="4" href="reports/playwright-mcp.html" aria-label="Playwright MCP 调研报告">
+            <div class="thumb">
+              <img src="https://opengraph.githubassets.com/playwright-mcp-hub/microsoft/playwright-mcp" alt="Playwright MCP preview" loading="lazy" onerror="this.style.display='none'">
+              <span class="topic">浏览器自动化</span>
+              <div class="glyph" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/><path d="M2 8h20"/></svg>
+              </div>
+            </div>
+            <div class="report-card-body">
+              <h3>Playwright MCP</h3>
+              <p>结构化页面快照、网页交互、调试工具与安全边界。</p>
+              <div class="pill-row"><span class="pill amber">MCP</span></div>
+              <div class="row"><span class="read">阅读报告</span></div>
+            </div>
+          </a>
+
+          <!-- Agent Reach · · 互联网工具 -->
+          <a class="report-card themed theme-reach reveal" data-delay="5" href="reports/agent-reach.html" aria-label="Agent Reach 调研报告">
+            <div class="thumb">
+              <img src="https://opengraph.githubassets.com/agent-reach-hub/Panniantong/Agent-Reach" alt="Agent Reach preview" loading="lazy" onerror="this.style.display='none'">
+              <span class="topic">互联网工具</span>
+              <div class="glyph" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15 15 0 0 1 4 10 15 15 0 0 1-4 10 15 15 0 0 1-4-10 15 15 0 0 1 4-10z"/></svg>
+              </div>
+            </div>
+            <div class="report-card-body">
+              <h3>Agent Reach</h3>
+              <p>网页、社媒、视频、RSS、GitHub 读取与搜索工具；Cookie 与抓取合规风险。</p>
+              <div class="pill-row"><span class="pill rose">Cookie risk</span></div>
+              <div class="row"><span class="read">阅读报告</span></div>
+            </div>
+          </a>
+
+          <!-- Planning with Files · · 长任务记忆 -->
+          <a class="report-card themed theme-planning reveal" data-delay="6" href="reports/planning-with-files.html" aria-label="Planning with Files 调研报告">
+            <div class="thumb">
+              <img src="https://raw.githubusercontent.com/OthmanAdi/planning-with-files/master/media/banner.png" alt="Planning with Files preview" loading="lazy" onerror="this.style.display='none'">
+              <span class="topic">长任务记忆</span>
+              <div class="glyph" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>
+              </div>
+            </div>
+            <div class="report-card-body">
+              <h3>Planning with Files</h3>
+              <p>持久化 Markdown 计划：task_plan / findings / progress / hooks。</p>
+              <div class="pill-row"><span class="pill amber">Hooks</span></div>
+              <div class="row"><span class="read">阅读报告</span></div>
+            </div>
+          </a>
+
+          <!-- RuView · · WiFi 感知 -->
+          <a class="report-card themed theme-ruview reveal" data-delay="7" href="reports/ruview.html" aria-label="RuView 调研报告">
+            <div class="thumb">
+              <img src="https://raw.githubusercontent.com/ruvnet/RuView/main/assets/v2-screen.png" alt="RuView preview" loading="lazy" onerror="this.style.display='none'">
+              <span class="topic">WiFi 感知</span>
+              <div class="glyph" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+              </div>
+            </div>
+            <div class="report-card-body">
+              <h3>RuView</h3>
+              <p>WiFi CSI/RSSI 感知平台：硬件门槛（ESP32-S3）、Claude/Codex 插件、隐私与误判风险。</p>
+              <div class="pill-row"><span class="pill green">ESP32-S3</span><span class="pill amber">Beta</span></div>
+              <div class="row"><span class="read">阅读报告</span></div>
+            </div>
+          </a>
+
+          <!-- Matt Pocock Skills · · 工程实践 -->
+          <a class="report-card themed theme-mattpocock reveal" data-delay="8" href="reports/mattpocock-skills.html" aria-label="Matt Pocock Skills 调研报告">
+            <div class="thumb">
+              <img src="https://res.cloudinary.com/total-typescript/image/upload/v1777382277/skill-repo-light_2x.png" alt="Matt Pocock Skills preview" loading="lazy" onerror="this.style.display='none'">
+              <span class="topic">工程实践</span>
+              <div class="glyph" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+              </div>
+            </div>
+            <div class="report-card-body">
+              <h3>Matt Pocock Skills</h3>
+              <p>真实工程导向的可组合 Agent skills：需求对齐、领域语言、TDD、诊断、架构改善、issue 拆解与交接。</p>
+              <div class="pill-row"><span class="pill violet">Skills</span><span class="pill green">Engineering</span></div>
+              <div class="row"><span class="read">阅读报告</span></div>
+            </div>
+          </a>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────── Themes ───────── -->
+    <section id="themes" class="section">
+      <div class="shell">
+        <div class="section-head">
+          <h2><span class="num">02</span>主题地图</h2>
+          <span class="meta">topic × risk matrix</span>
+        </div>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:22%">主题</th>
+                <th style="width:16%">相关报告</th>
+                <th>核心问题</th>
+                <th style="width:24%">优先关注风险</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>办公自动化与企业数据</td>
+                <td><a href="reports/feishu-cli.html">飞书 CLI</a></td>
+                <td>Claude Code 如何读取、生成、发送和存储飞书内容。</td>
+                <td>个人 token、app secret、权限过宽、prompt injection。</td>
+              </tr>
+              <tr>
+                <td>空间感知与硬件实验</td>
+                <td><a href="reports/ruview.html">RuView</a></td>
+                <td>WiFi 信号能否在目标环境中稳定感知人和生命体征。</td>
+                <td>隐私合规、误判、API 暴露、硬件和模型泛化。</td>
+              </tr>
+              <tr>
+                <td>Agentic 开发入口</td>
+                <td><a href="reports/warp.html">Warp</a></td>
+                <td>终端、Agent、Drive、Oz 如何组合成开发环境。</td>
+                <td>终端权限、云端上下文、许可证、自动化 review 偏差。</td>
+              </tr>
+              <tr>
+                <td>长期任务记忆</td>
+                <td><a href="reports/planning-with-files.html">Planning with Files</a></td>
+                <td>如何用文件弥补上下文窗口记忆不足。</td>
+                <td>计划文件注入、hook 脚本、敏感信息落盘。</td>
+              </tr>
+              <tr>
+                <td>自治编码循环</td>
+                <td><a href="reports/ralph.html">Ralph</a></td>
+                <td>如何让多个新上下文 Agent 按 PRD 连续完成故事。</td>
+                <td>危险权限、错误累积、质量门禁不足、成本失控。</td>
+              </tr>
+              <tr>
+                <td>Agent 互联网能力</td>
+                <td><a href="reports/agent-reach.html">Agent Reach</a></td>
+                <td>如何给 Agent 安装网页、社媒、视频、RSS、GitHub 读取与搜索工具。</td>
+                <td>Cookie 登录态、抓取合规、上游工具供应链、工作区污染。</td>
+              </tr>
+              <tr>
+                <td>浏览器自动化</td>
+                <td><a href="reports/playwright-mcp.html">Playwright MCP</a></td>
+                <td>如何让 MCP 客户端通过结构化页面快照操作浏览器并做验证。</td>
+                <td>登录态泄露、文件访问、网络越界、npx @latest 供应链。</td>
+              </tr>
+              <tr>
+                <td>工程实践技能</td>
+                <td><a href="reports/mattpocock-skills.html">Matt Pocock Skills</a></td>
+                <td>如何用小而可组合的技能强化需求对齐、TDD、诊断和架构维护。</td>
+                <td>文档过期、流程依赖人类判断、技能安装供应链、hooks 误配置。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────── Method ───────── -->
+    <section id="method" class="section">
+      <div class="shell">
+        <div class="section-head">
+          <h2><span class="num">03</span>研究边界</h2>
+          <span class="meta">scope &amp; limits</span>
+        </div>
+        <div class="grid two">
+          <div class="callout good">
+            <h3>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--green)"><polyline points="20 6 9 17 4 12"/></svg>
+              已完成
+            </h3>
+            <p>读取官网、GitHub API、README、release notes、安装文档、技能文件与脚本；按 <strong>结论 → 能力 → 应用 → 风险 → 来源</strong> 五段式统一结构产出。</p>
+          </div>
+          <div class="callout warn">
+            <h3>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--amber)"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              未执行
+            </h3>
+            <p>未登录 Warp / 飞书 / Claude Code 插件市场；未运行 RuView Docker 或硬件；未实际执行 Planning hooks、Ralph 自动循环、Agent Reach 安装、Playwright MCP 浏览器会话或 Matt Pocock skills。"运行效果"类结论需在目标环境复验。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="shell">
+      <a class="brand" href="index.html">
+        <span class="mark" aria-hidden="true"></span>
+        <span>Research Hub</span>
+      </a>
+      <span>AI Agent &amp; DevTools · 2026</span>
+    </div>
+  </footer>
+  <script>
+    (function () {
+      var els = document.querySelectorAll('.reveal');
+      var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduced || !('IntersectionObserver' in window)) {
+        els.forEach(function (el) { el.classList.add('in'); });
+        return;
+      }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+        });
+      }, { rootMargin: '0px 0px -10% 0px', threshold: 0.05 });
+      els.forEach(function (el) { io.observe(el); });
+    })();
+  </script>
+</body>
+</html>

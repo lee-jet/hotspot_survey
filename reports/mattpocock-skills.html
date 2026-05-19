@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Matt Pocock Skills 调研报告</title>
+  <link rel="stylesheet" href="../assets/report.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <a class="brand" href="../index.html"><span class="mark" aria-hidden="true"></span><span>Research Hub</span></a>
+      <nav class="nav" aria-label="报告导航">
+        <a href="../index.html">总览</a>
+        <a href="#summary">结论</a>
+        <a href="#skills">技能</a>
+        <a href="#risk">风险</a>
+        <a href="#sources">来源</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="shell hero-grid">
+        <div>
+          <p class="eyebrow">Composable Engineering Skills</p>
+          <h1>Matt Pocock Skills 调研报告</h1>
+          <p class="lead">mattpocock/skills 是一组面向真实工程工作的 Agent skills，强调小而可组合、可改造、可控，不追求“大流程接管”。核心思想是用工程基本功修复 Agent 常见失败：需求未对齐、语言不统一、反馈环不足、架构退化。</p>
+          <div class="pill-row">
+            <span class="pill blue">14 promoted skills</span>
+            <span class="pill green">MIT</span>
+            <span class="pill amber">Composable</span>
+            <span class="pill violet">Claude/Codex agents</span>
+          </div>
+        </div>
+        <figure class="hero-media">
+          <img src="https://res.cloudinary.com/total-typescript/image/upload/v1777382277/skill-repo-light_2x.png" alt="Matt Pocock Skills 仓库横幅" loading="lazy" onerror="this.style.display='none'">
+          <figcaption class="caption">图片来源：mattpocock/skills README 横幅。</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="summary" class="section">
+      <div class="shell">
+        <h2>1. 结论摘要</h2>
+        <div class="grid two">
+          <div class="callout good">
+            <h3>适合场景</h3>
+            <p>适合已经用 Claude Code、Codex 或类似 coding agent 的工程团队，把“问清需求、建立领域语言、TDD、诊断、架构改善、拆 issue、交接”变成可复用技能。</p>
+          </div>
+          <div class="callout warn">
+            <h3>使用边界</h3>
+            <p>这不是一套自治 agent loop，也不是项目管理框架。它更像工程实践工具箱，需要人类持续参与和判断，尤其是 grilling、ADR、架构建议和 triage。</p>
+          </div>
+        </div>
+        <div class="kpi-row">
+          <div class="kpi"><strong>91,277</strong><span>GitHub stars，调研时 API 返回值</span></div>
+          <div class="kpi"><strong>14</strong><span>plugin.json 正式列出的技能</span></div>
+          <div class="kpi"><strong>0</strong><span>调研时没有 latest release</span></div>
+          <div class="kpi"><strong>MIT</strong><span>License</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="shell">
+        <h2>2. 当前状态</h2>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>项目</th><th>观察</th></tr></thead>
+            <tbody>
+              <tr><td>仓库</td><td><code>mattpocock/skills</code>，默认分支 <code>main</code>，MIT License。</td></tr>
+              <tr><td>定位</td><td>README 描述为 “Skills for Real Engineers”，来自作者日常使用的 <code>.claude</code> 目录，不是 vibe coding。</td></tr>
+              <tr><td>安装</td><td>README 推荐 <code>npx skills@latest add mattpocock/skills</code>，并要求选择 <code>/setup-matt-pocock-skills</code>。</td></tr>
+              <tr><td>组织</td><td><code>CLAUDE.md</code> 说明技能按 <code>engineering</code>、<code>productivity</code>、<code>misc</code>、<code>personal</code>、<code>in-progress</code>、<code>deprecated</code> 分桶。</td></tr>
+              <tr><td>发布面</td><td><code>.claude-plugin/plugin.json</code> 正式列出 14 个技能：10 个 engineering、4 个 productivity；README 另列 4 个 misc。</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="skills" class="section">
+      <div class="shell">
+        <h2>3. 技能体系</h2>
+        <div class="grid three">
+          <article class="card">
+            <h3>需求对齐</h3>
+            <p><code>/grill-me</code> 和 <code>/grill-with-docs</code> 通过逐问逐答把模糊需求压实；后者会结合 <code>CONTEXT.md</code> 和 ADR。</p>
+          </article>
+          <article class="card">
+            <h3>领域语言</h3>
+            <p><code>CONTEXT.md</code> 用来定义项目术语，减少 Agent 啰嗦和误解，让变量、文件和讨论使用一致语言。</p>
+          </article>
+          <article class="card">
+            <h3>反馈环</h3>
+            <p><code>/tdd</code> 强调一测一实现的 red-green-refactor；<code>/diagnose</code> 要先构建可重复的 pass/fail loop。</p>
+          </article>
+          <article class="card">
+            <h3>架构维护</h3>
+            <p><code>/improve-codebase-architecture</code> 寻找 shallow module 和 deepening opportunities，目标是 locality、leverage、testability。</p>
+          </article>
+          <article class="card">
+            <h3>工作拆解</h3>
+            <p><code>/to-prd</code>、<code>/to-issues</code>、<code>/triage</code> 把计划变成 issue tracker 中可执行、可分配、可验收的工作。</p>
+          </article>
+          <article class="card">
+            <h3>交接与压缩</h3>
+            <p><code>/handoff</code> 把当前会话压缩成交接文档；<code>/caveman</code> 以极简表达降低 token 使用。</p>
+          </article>
+        </div>
+
+        <h3 style="margin-top:24px">正式技能清单</h3>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>类别</th><th>技能</th><th>用途</th></tr></thead>
+            <tbody>
+              <tr><td>Engineering</td><td><code>diagnose</code>、<code>tdd</code></td><td>构建反馈环、测试驱动、修复 bug 和回归。</td></tr>
+              <tr><td>Engineering</td><td><code>grill-with-docs</code>、<code>setup-matt-pocock-skills</code></td><td>对齐需求、建立 issue tracker/triage/domain docs 配置。</td></tr>
+              <tr><td>Engineering</td><td><code>triage</code>、<code>to-issues</code>、<code>to-prd</code></td><td>把讨论和计划转成 PRD/issue，并按状态机 triage。</td></tr>
+              <tr><td>Engineering</td><td><code>improve-codebase-architecture</code>、<code>zoom-out</code>、<code>prototype</code></td><td>理解系统、改善架构、探索方案。</td></tr>
+              <tr><td>Productivity</td><td><code>caveman</code>、<code>grill-me</code>、<code>handoff</code>、<code>write-a-skill</code></td><td>通用对话效率、计划澄清、会话交接和创建技能。</td></tr>
+              <tr><td>Misc</td><td><code>git-guardrails-claude-code</code> 等</td><td>README 列出但不在 plugin.json 正式技能数组中，偏工具/备用。</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="shell">
+        <h2>4. 推荐落地方式</h2>
+        <div class="flow">
+          <div class="step"><b>1. 安装</b><code>npx skills@latest add mattpocock/skills</code>。</div>
+          <div class="step"><b>2. 初始化</b>运行 <code>/setup-matt-pocock-skills</code>，选择 issue tracker、triage labels 和 docs 路径。</div>
+          <div class="step"><b>3. 对齐</b>每个复杂需求先用 <code>/grill-with-docs</code> 或 <code>/grill-me</code>。</div>
+          <div class="step"><b>4. 实施</b>开发时用 <code>/tdd</code>、bug 用 <code>/diagnose</code>。</div>
+          <div class="step"><b>5. 维护</b>定期用 <code>/improve-codebase-architecture</code> 和 <code>/handoff</code>。</div>
+        </div>
+
+        <pre><code>npx skills@latest add mattpocock/skills
+
+# 在 Agent 中运行
+/setup-matt-pocock-skills
+/grill-with-docs
+/tdd
+/diagnose</code></pre>
+      </div>
+    </section>
+
+    <section id="risk" class="section">
+      <div class="shell">
+        <h2>5. 风险分析</h2>
+        <div class="grid two">
+          <div class="callout warn">
+            <h3>流程依赖人类质量</h3>
+            <p>这些技能故意小而可组合，意味着它们不会替你做完整项目治理。用户需要能回答问题、确认设计、审查 ADR 和判断架构建议。</p>
+          </div>
+          <div class="callout warn">
+            <h3>文档会变成事实源</h3>
+            <p><code>CONTEXT.md</code> 和 ADR 会影响后续 Agent 语言和决策。错误术语或过期决策会被不断复用，需定期清理。</p>
+          </div>
+          <div class="callout risk">
+            <h3>技能安装供应链</h3>
+            <p><code>npx skills@latest</code> 和 GitHub repo 直接安装都属于供应链入口。团队环境应固定版本或 commit，并走 PR 审查。</p>
+          </div>
+          <div class="callout risk">
+            <h3>钩子和防护误配置</h3>
+            <p>例如 <code>git-guardrails-claude-code</code> 会修改 Claude hooks。如果覆盖现有 settings 或脚本路径错误，可能造成防护失效或工作流中断。</p>
+          </div>
+        </div>
+
+        <h3 style="margin-top:24px">建议控制</h3>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>控制项</th><th>建议</th></tr></thead>
+            <tbody>
+              <tr><td>安装</td><td>固定 commit，审查 <code>SKILL.md</code> 和插件清单，不在敏感环境直接使用 <code>@latest</code>。</td></tr>
+              <tr><td>文档</td><td><code>CONTEXT.md</code> 只放领域术语，不放实现细节、临时计划和秘密。</td></tr>
+              <tr><td>测试</td><td>使用 <code>/tdd</code> 时坚持行为测试和公共接口，不用测试锁死实现。</td></tr>
+              <tr><td>架构</td><td><code>/improve-codebase-architecture</code> 的输出当候选建议，需要人类选择和分阶段落地。</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="sources" class="section">
+      <div class="shell">
+        <h2>6. 参考来源</h2>
+        <div class="sources">
+          <a class="source-link" href="https://github.com/mattpocock/skills">GitHub 仓库<span>mattpocock/skills</span></a>
+          <a class="source-link" href="https://github.com/mattpocock/skills/blob/main/README.md">README<span>理念、安装、技能列表</span></a>
+          <a class="source-link" href="https://github.com/mattpocock/skills/blob/main/.claude-plugin/plugin.json">plugin.json<span>正式技能清单</span></a>
+          <a class="source-link" href="https://github.com/mattpocock/skills/blob/main/CONTEXT.md">CONTEXT.md<span>领域语言示例</span></a>
+          <a class="source-link" href="https://github.com/mattpocock/skills/blob/main/skills/engineering/tdd/SKILL.md">TDD skill<span>red-green-refactor</span></a>
+          <a class="source-link" href="https://github.com/mattpocock/skills/blob/main/skills/engineering/diagnose/SKILL.md">Diagnose skill<span>诊断反馈环</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="shell">生成于 2026-05-18。未安装技能，结论基于公开仓库资料。</div>
+  </footer>
+</body>
+</html>
