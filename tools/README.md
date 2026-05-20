@@ -1,6 +1,6 @@
-# tools/ — Research Hub 三步工具链
+# tools/ — Research Hub 工具链
 
-三个独立、单一职责的脚本。每步可单独触发、单独重跑、单独回滚。
+四个脚本：底层三步独立 + 一个总管。
 
 ```
 URL  ──►  generate.py  ──►  reports/<slug>.html        # 步骤 1
@@ -8,7 +8,47 @@ URL  ──►  generate.py  ──►  reports/<slug>.html        # 步骤 1
         reports/*.html  ──►  merge.py  ──►  index.html  # 步骤 2
                                     │
                   git  ──►  ship.sh  ──►  origin/main   # 步骤 3
+
+         ┌─────────────────────────────────────────────┐
+         │  hub.sh = 1 + 2 + 3 串联（含 lint 与确认提示）│
+         └─────────────────────────────────────────────┘
 ```
+
+## 0. `hub.sh` —— 总管（推荐入口）
+
+```bash
+# 加一个新工具（端到端，~130 秒，提示前会让你确认）
+bash tools/hub.sh https://github.com/owner/tool
+
+# 批量入库（一次 push）
+bash tools/hub.sh \
+    https://github.com/o1/a \
+    https://github.com/o2/b \
+    https://github.com/o3/c \
+    --yes
+
+# 草稿模式（generate 完不 merge 也不 push，方便慢慢改）
+bash tools/hub.sh https://github.com/owner/tool --draft --no-push
+
+# 资料手工改完了，只想同步 + 推
+bash tools/hub.sh
+
+# 自定义 commit 信息
+bash tools/hub.sh https://github.com/owner/tool -m "feat: add owner/tool"
+```
+
+| 标志 | 作用 |
+|---|---|
+| `-y, --yes` | 跳过 push 前确认 |
+| `--no-push` | 走到 merge 就停 |
+| `--no-merge` | generate 完就停 |
+| `--no-llm` | 用脚手架模式（不调 LLM） |
+| `--draft` | 新报告标 draft，不进索引 |
+| `--overwrite` | 覆盖同 slug 报告 |
+| `--order N` | 设置 hub:order |
+| `-m, --message` | 自定义 commit message |
+
+`hub.sh` 内部按顺序跑：generate（每个 URL）→ `merge.py --lint` → `merge.py` → 显示 diff → 确认 → `ship.sh`。任何一步失败立即停。
 
 ## 步骤 1 · `generate.py` —— URL → 报告脚手架
 
@@ -125,9 +165,10 @@ python3 tools/merge.py --dry-run   # 不进 index
 
 | 文件 | 类型 | 用途 |
 | --- | --- | --- |
+| `hub.sh` | **总管入口** | 串联 generate → lint → merge → 确认 → ship |
+| `generate.py` | 步骤 1 | URL → 报告（LLM 填充或脚手架） |
+| `merge.py` | 步骤 2 | 重建 index AUTO 区域；`--check` / `--lint` / `--dry-run` |
+| `ship.sh` | 步骤 3 | git 提交 + push（白名单 stage） |
 | `_common.py` | 共用模块 | meta 解析 / AUTO 区域替换 / glyph SVG 字典 |
-| `_backfill_meta.py` | 一次性脚本 | 给已有 8 份报告回填 meta（已运行） |
-| `generate.py` | 步骤 1 | URL → 报告脚手架 |
-| `merge.py` | 步骤 2 | 重建 index AUTO 区域 |
-| `ship.sh` | 步骤 3 | git 提交 + push |
+| `_backfill_meta.py` | 一次性 | 已有报告回填 meta（已运行） |
 | `README.md` | 文档 | 本文件 |
