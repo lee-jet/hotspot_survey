@@ -131,10 +131,12 @@
     <section class="section" style="padding-top: 24px;">
       <div class="shell">
         <div class="kpi-row">
+          <!-- AUTO:kpi-start -->
           <div class="kpi reveal" data-delay="1"><strong>8</strong><span>调研对象（工具 / 框架 / 实践）</span></div>
           <div class="kpi reveal" data-delay="2"><strong>4</strong><span>大风险类别（Token / Cookie / Injection / 供应链）</span></div>
-          <div class="kpi reveal" data-delay="3"><strong>30+</strong><span>引用来源（官网 · GitHub · Release）</span></div>
+          <div class="kpi reveal" data-delay="3"><strong>40+</strong><span>引用来源（官网 · GitHub · Release）</span></div>
           <div class="kpi reveal" data-delay="4"><strong>5</strong><span>段式统一结构（结论 → 能力 → 应用 → 风险 → 来源）</span></div>
+          <!-- AUTO:kpi-end -->
         </div>
       </div>
     </section>
@@ -149,11 +151,10 @@
         <p class="muted reveal" data-delay="1" style="margin: 0 0 22px; max-width: 760px;">大卡片为高优先级与高风险议题，小卡片为辅助专题。右下角图标表示主题类型。</p>
 
         <div class="grid four">
-
-          <!-- Ralph · · 自治循环 · high risk -->
-          <a class="report-card themed theme-ralph reveal" data-delay="1" href="reports/ralph.html" aria-label="Ralph 调研报告">
+          <!-- AUTO:cards-start -->
+          <a class="report-card themed theme-ralph reveal" data-delay="1" href="reports/ralph.html" aria-label="Ralph · 自治 AI agent loop 调研报告">
             <div class="thumb">
-              <img src="https://raw.githubusercontent.com/snarktank/ralph/main/ralph-flowchart.png" alt="Ralph preview" loading="lazy" onerror="this.style.display='none'">
+              <img src="https://raw.githubusercontent.com/snarktank/ralph/main/ralph-flowchart.png" alt="Ralph · 自治 AI agent loop preview" loading="lazy" onerror="this.style.display='none'">
               <span class="topic">自治循环</span>
               <div class="glyph" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10"/><path d="M20.49 15a9 9 0 0 1-14.85 3.36L1 14"/></svg>
@@ -167,7 +168,6 @@
             </div>
           </a>
 
-          <!-- Warp · · 终端 Agent -->
           <a class="report-card themed theme-warp reveal" data-delay="2" href="reports/warp.html" aria-label="Warp 调研报告">
             <div class="thumb">
               <img src="https://github.com/user-attachments/assets/9976b2da-2edd-4604-a36c-8fd53719c6d4" alt="Warp preview" loading="lazy" onerror="this.style.display='none'">
@@ -184,10 +184,9 @@
             </div>
           </a>
 
-          <!-- Feishu CLI · · 办公自动化 -->
-          <a class="report-card themed theme-feishu reveal" data-delay="3" href="reports/feishu-cli.html" aria-label="飞书 CLI 与 Claude Code 报告">
+          <a class="report-card themed theme-feishu reveal" data-delay="3" href="reports/feishu-cli.html" aria-label="飞书 CLI 与 Claude Code 调研报告">
             <div class="thumb">
-              <img src="https://opengraph.githubassets.com/feishu-cli-hub/larksuite/cli" alt="larksuite/cli GitHub preview" loading="lazy" onerror="this.style.display='none'">
+              <img src="https://opengraph.githubassets.com/feishu-cli-hub/larksuite/cli" alt="飞书 CLI 与 Claude Code preview" loading="lazy" onerror="this.style.display='none'">
               <span class="topic">办公自动化</span>
               <div class="glyph" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
@@ -195,13 +194,12 @@
             </div>
             <div class="report-card-body">
               <h3>飞书 CLI 与 Claude Code</h3>
-              <p>官方 <code>larksuite/cli</code> 与社区 <code>riba2534/feishu-cli</code> 对比：文档、Sheets/Base、消息卡片与 Token 风险。</p>
+              <p>官方 larksuite/cli 与社区 riba2534/feishu-cli 对比：文档、Sheets/Base、消息卡片与 Token 风险。</p>
               <div class="pill-row"><span class="pill blue">Feishu</span><span class="pill rose">Token risk</span></div>
               <div class="row"><span class="read">阅读报告</span></div>
             </div>
           </a>
 
-          <!-- Playwright MCP · · 浏览器自动化 -->
           <a class="report-card themed theme-playwright reveal" data-delay="4" href="reports/playwright-mcp.html" aria-label="Playwright MCP 调研报告">
             <div class="thumb">
               <img src="https://opengraph.githubassets.com/playwright-mcp-hub/microsoft/playwright-mcp" alt="Playwright MCP preview" loading="lazy" onerror="this.style.display='none'">
@@ -218,7 +216,6 @@
             </div>
           </a>
 
-          <!-- Agent Reach · · 互联网工具 -->
           <a class="report-card themed theme-reach reveal" data-delay="5" href="reports/agent-reach.html" aria-label="Agent Reach 调研报告">
             <div class="thumb">
               <img src="https://opengraph.githubassets.com/agent-reach-hub/Panniantong/Agent-Reach" alt="Agent Reach preview" loading="lazy" onerror="this.style.display='none'">
@@ -235,7 +232,6 @@
             </div>
           </a>
 
-          <!-- Planning with Files · · 长任务记忆 -->
           <a class="report-card themed theme-planning reveal" data-delay="6" href="reports/planning-with-files.html" aria-label="Planning with Files 调研报告">
             <div class="thumb">
               <img src="https://raw.githubusercontent.com/OthmanAdi/planning-with-files/master/media/banner.png" alt="Planning with Files preview" loading="lazy" onerror="this.style.display='none'">
@@ -252,7 +248,6 @@
             </div>
           </a>
 
-          <!-- RuView · · WiFi 感知 -->
           <a class="report-card themed theme-ruview reveal" data-delay="7" href="reports/ruview.html" aria-label="RuView 调研报告">
             <div class="thumb">
               <img src="https://raw.githubusercontent.com/ruvnet/RuView/main/assets/v2-screen.png" alt="RuView preview" loading="lazy" onerror="this.style.display='none'">
@@ -269,7 +264,6 @@
             </div>
           </a>
 
-          <!-- Matt Pocock Skills · · 工程实践 -->
           <a class="report-card themed theme-mattpocock reveal" data-delay="8" href="reports/mattpocock-skills.html" aria-label="Matt Pocock Skills 调研报告">
             <div class="thumb">
               <img src="https://res.cloudinary.com/total-typescript/image/upload/v1777382277/skill-repo-light_2x.png" alt="Matt Pocock Skills preview" loading="lazy" onerror="this.style.display='none'">
@@ -285,7 +279,7 @@
               <div class="row"><span class="read">阅读报告</span></div>
             </div>
           </a>
-
+          <!-- AUTO:cards-end -->
         </div>
       </div>
     </section>
@@ -308,17 +302,12 @@
               </tr>
             </thead>
             <tbody>
+              <!-- AUTO:matrix-start -->
               <tr>
-                <td>办公自动化与企业数据</td>
-                <td><a href="reports/feishu-cli.html">飞书 CLI</a></td>
-                <td>Claude Code 如何读取、生成、发送和存储飞书内容。</td>
-                <td>个人 token、app secret、权限过宽、prompt injection。</td>
-              </tr>
-              <tr>
-                <td>空间感知与硬件实验</td>
-                <td><a href="reports/ruview.html">RuView</a></td>
-                <td>WiFi 信号能否在目标环境中稳定感知人和生命体征。</td>
-                <td>隐私合规、误判、API 暴露、硬件和模型泛化。</td>
+                <td>自治编码循环</td>
+                <td><a href="reports/ralph.html">Ralph</a></td>
+                <td>如何让多个新上下文 Agent 按 PRD 连续完成故事。</td>
+                <td>危险权限、错误累积、质量门禁不足、成本失控。</td>
               </tr>
               <tr>
                 <td>Agentic 开发入口</td>
@@ -327,22 +316,10 @@
                 <td>终端权限、云端上下文、许可证、自动化 review 偏差。</td>
               </tr>
               <tr>
-                <td>长期任务记忆</td>
-                <td><a href="reports/planning-with-files.html">Planning with Files</a></td>
-                <td>如何用文件弥补上下文窗口记忆不足。</td>
-                <td>计划文件注入、hook 脚本、敏感信息落盘。</td>
-              </tr>
-              <tr>
-                <td>自治编码循环</td>
-                <td><a href="reports/ralph.html">Ralph</a></td>
-                <td>如何让多个新上下文 Agent 按 PRD 连续完成故事。</td>
-                <td>危险权限、错误累积、质量门禁不足、成本失控。</td>
-              </tr>
-              <tr>
-                <td>Agent 互联网能力</td>
-                <td><a href="reports/agent-reach.html">Agent Reach</a></td>
-                <td>如何给 Agent 安装网页、社媒、视频、RSS、GitHub 读取与搜索工具。</td>
-                <td>Cookie 登录态、抓取合规、上游工具供应链、工作区污染。</td>
+                <td>办公自动化与企业数据</td>
+                <td><a href="reports/feishu-cli.html">飞书 CLI</a></td>
+                <td>Claude Code 如何读取、生成、发送和存储飞书内容。</td>
+                <td>个人 token、app secret、权限过宽、prompt injection。</td>
               </tr>
               <tr>
                 <td>浏览器自动化</td>
@@ -351,11 +328,30 @@
                 <td>登录态泄露、文件访问、网络越界、npx @latest 供应链。</td>
               </tr>
               <tr>
+                <td>Agent 互联网能力</td>
+                <td><a href="reports/agent-reach.html">Agent Reach</a></td>
+                <td>如何给 Agent 安装网页、社媒、视频、RSS、GitHub 读取与搜索工具。</td>
+                <td>Cookie 登录态、抓取合规、上游工具供应链、工作区污染。</td>
+              </tr>
+              <tr>
+                <td>长期任务记忆</td>
+                <td><a href="reports/planning-with-files.html">Planning with Files</a></td>
+                <td>如何用文件弥补上下文窗口记忆不足。</td>
+                <td>计划文件注入、hook 脚本、敏感信息落盘。</td>
+              </tr>
+              <tr>
+                <td>空间感知与硬件实验</td>
+                <td><a href="reports/ruview.html">RuView</a></td>
+                <td>WiFi 信号能否在目标环境中稳定感知人和生命体征。</td>
+                <td>隐私合规、误判、API 暴露、硬件和模型泛化。</td>
+              </tr>
+              <tr>
                 <td>工程实践技能</td>
                 <td><a href="reports/mattpocock-skills.html">Matt Pocock Skills</a></td>
                 <td>如何用小而可组合的技能强化需求对齐、TDD、诊断和架构维护。</td>
                 <td>文档过期、流程依赖人类判断、技能安装供应链、hooks 误配置。</td>
               </tr>
+              <!-- AUTO:matrix-end -->
             </tbody>
           </table>
         </div>
