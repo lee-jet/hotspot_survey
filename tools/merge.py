@@ -5,6 +5,7 @@ Usage:
     python3 tools/merge.py             # rewrite index.html in place
     python3 tools/merge.py --dry-run   # show what would change, no write
     python3 tools/merge.py --check     # validate meta completeness only
+    python3 tools/merge.py --lint      # quality gate: sources, TODOs, links
 
 Touches only content between AUTO:cards / AUTO:matrix / AUTO:kpi markers.
 The hero, pillars, study-boundary, footer sections are never modified.
@@ -12,12 +13,14 @@ The hero, pillars, study-boundary, footer sections are never modified.
 from __future__ import annotations
 
 import difflib
+import re
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from _common import (  # noqa: E402
     INDEX_PATH,
+    REPORTS_DIR,
     attr,
     collect_reports,
     glyph_svg,
@@ -127,9 +130,79 @@ def render_kpi(reports: list[dict]) -> str:
     )
 
 
+MIN_SOURCES = 3
+TODO_PATTERNS = (
+    re.compile(r"\bTODO\b"),
+    re.compile(r"待补"),
+    re.compile(r"占位"),
+)
+
+
+def lint_report(report: dict) -> tuple[list[str], list[str]]:
+    """Return (errors, warnings) for a single report."""
+    errs: list[str] = []
+    warns: list[str] = []
+    path = REPORTS_DIR / report["__filename"]
+    text = path.read_text(encoding="utf-8")
+
+    # 1. Sources floor
+    if report["__sources"] < MIN_SOURCES:
+        errs.append(
+            f"only {report['__sources']} <a class=\"source-link\"> entries "
+            f"(min {MIN_SOURCES})"
+        )
+
+    # 2. TODO / placeholder remnants outside <code>/<pre>
+    body = re.sub(r"<pre.*?</pre>", "", text, flags=re.DOTALL)
+    body = re.sub(r"<code.*?</code>", "", body, flags=re.DOTALL)
+    for rx in TODO_PATTERNS:
+        m = rx.search(body)
+        if m:
+            errs.append(f"unfilled placeholder near '{m.group(0)}'")
+            break
+
+    # 3. Internal reports/<...>.html links (a sibling exists?)
+    sibling_links = set(
+        re.findall(r'href="(?:\.\./)?reports/([\w-]+)\.html"', text)
+    )
+    for slug in sibling_links:
+        if not (REPORTS_DIR / f"{slug}.html").exists():
+            errs.append(f"broken sibling link: reports/{slug}.html")
+
+    # 4. CSS link path
+    if 'href="../assets/report.css"' not in text:
+        warns.append("CSS link not '../assets/report.css' — may break in subpath")
+
+    # 5. hub:status sanity
+    if report.get("status") not in {"published", "draft"}:
+        warns.append(f"hub:status='{report.get('status')}' (expected published|draft)")
+
+    return errs, warns
+
+
+def run_lint(reports: list[dict]) -> int:
+    total_e = total_w = 0
+    print(f"Linting {len(reports)} reports (min sources: {MIN_SOURCES})\n")
+    for r in reports:
+        errs, warns = lint_report(r)
+        if not errs and not warns:
+            print(f"  ✓ {r['__filename']:32}  sources={r['__sources']}")
+            continue
+        print(f"  ✗ {r['__filename']:32}  sources={r['__sources']}")
+        for e in errs:
+            print(f"      ERROR: {e}")
+            total_e += 1
+        for w in warns:
+            print(f"      WARN:  {w}")
+            total_w += 1
+    print(f"\n{total_e} errors, {total_w} warnings.")
+    return 1 if total_e > 0 else 0
+
+
 def main(argv: list[str]) -> int:
     dry_run = "--dry-run" in argv
     check_only = "--check" in argv
+    lint_mode = "--lint" in argv
 
     reports = collect_reports()
     if not reports:
@@ -142,6 +215,10 @@ def main(argv: list[str]) -> int:
         for e in errs:
             print(f"  - {e}", file=sys.stderr)
         return 1
+
+    if lint_mode:
+        return run_lint(reports)
+
     if check_only:
         print(f"✓ {len(reports)} reports, all required meta present.")
         return 0
