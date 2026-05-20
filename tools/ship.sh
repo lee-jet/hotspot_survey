@@ -34,7 +34,7 @@ if ! git remote get-url origin >/dev/null 2>&1; then
 fi
 
 # Stage only the allow-listed paths
-git add -A index.html reports/ assets/ README.md _redirects _headers robots.txt .nojekyll .github/ 2>/dev/null || true
+git add -A index.html reports/ assets/ README.md _redirects _headers robots.txt sitemap.xml .nojekyll .github/ tools/ 2>/dev/null || true
 
 # Anything to commit?
 if git diff --cached --quiet; then

@@ -1,2 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /trash/
+
+Sitemap: https://lee-jet.github.io/hotspot_survey/sitemap.xml

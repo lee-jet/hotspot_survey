@@ -168,6 +168,65 @@ python3 -m http.server 8080
 
 ---
 
+## SEO
+
+分两层：站点（被 Google/Bing 索引）+ 仓库（在 github.com 内被搜索）。
+
+### A. 站点 SEO（已自动化）
+
+每次 `bash tools/hub.sh`（或单独跑 `python3 tools/merge.py`）会自动维护：
+
+| 资产 | 来源 | 内容 |
+| --- | --- | --- |
+| **每页 `<head>` 内 AUTO:seo 块** | hub:* meta | description / keywords / canonical / OG / Twitter Card / JSON-LD Article |
+| **首页 AUTO:seo 块** | `tools/_common.py` 常量 | OG website + JSON-LD WebSite + 完整 OG/Twitter 套件 |
+| **sitemap.xml** | 报告文件 mtime | 1 个 index + 9 个 report 的 lastmod / changefreq / priority |
+| **robots.txt** | 静态 | `Sitemap:` 指向 + 排除 `/trash/` |
+
+可通过环境变量切换站点 URL（自定义域名时）：
+
+```bash
+HUB_SITE_URL=https://research.example.com bash tools/hub.sh
+```
+
+未设置时自动从 `git remote get-url origin` 推导，例如 `git@github.com:lee-jet/hotspot_survey.git` → `https://lee-jet.github.io/hotspot_survey`。
+
+### B. GitHub 仓库 SEO（要手动在 UI 填）
+
+GitHub 内搜索 / 仓库 OG 卡片靠这些字段：
+
+| 位置 | 字段 | 建议填法 |
+| --- | --- | --- |
+| 仓库主页右侧 ⚙ **About** | **Description** | `按结论→能力→应用→风险→来源五段式拆解 AI Agent 与开发者工具。已收录 9 份调研。` |
+| ⚙ About | **Website** | `https://lee-jet.github.io/hotspot_survey/` |
+| ⚙ About | **Topics**（最多 20 个） | `ai-agent` `agentic-tools` `claude-code` `cursor` `mcp` `devtools` `research-hub` `awesome-list` `prompt-engineering` `code-graph` `playwright-mcp` `feishu-cli` `developer-tools` `security-research` `chinese-content` |
+| ⚙ About | **Releases / Packages / Deployments** 三个复选框 | 至少勾 **Deployments**（链到 Pages） |
+| **Settings → General → Social preview** | 1280×640 PNG 图 | 用 [shields.io](https://shields.io) 或 [og-img.vercel.app](https://og-img.vercel.app) 生成；包含项目名、tagline、关键数字。**未上传时 GitHub 会自动用 README 第一张图 + 仓库名** |
+| **Settings → General** | **Description**（同步 About） | 同上 |
+| **Settings → General** | ☑ **Wikis** 关闭 / ☑ **Issues** 开启 / ☑ **Discussions** 可选 | 减少噪音入口 |
+| README 第一段 | — | 前 160 字符就要把价值讲清楚，会出现在 Google 搜索结果的预览里（已优化） |
+| README 顶部 | badges | License / build status / last commit 等小徽章提升仓库质感（可加） |
+
+### 一次性手动 5 分钟操作清单
+
+1. 打开 https://github.com/lee-jet/hotspot_survey
+2. 主页右上 ⚙ → 填上面表里 About 的 Description / Website / Topics → Save changes
+3. Settings → General → 滚到 **Social preview** → Upload an image（如无可暂跳过 —— Pages 部署后 OG 会先用站点的）
+4. Settings → General → 顶部 Description 同步一份（与 About 同）
+5. 完成后访问 https://github.com/lee-jet/hotspot_survey/community 看 Community Standards 完成度
+
+### 验收
+
+| 检查项 | 方法 |
+| --- | --- |
+| 站点 sitemap | 浏览器开 `<SITE_URL>/sitemap.xml` 应看到 10 个 `<url>` |
+| robots | 开 `<SITE_URL>/robots.txt` 应有 `Sitemap:` 指向 |
+| OG 预览 | 把任一报告 URL 贴到 https://www.opengraph.xyz/ 看渲染效果 |
+| Google 索引 | 部署后 1–7 天去 https://search.google.com/search-console 提交站点；用 `site:lee-jet.github.io/hotspot_survey` 查收录 |
+| GitHub 内搜 | `topic:ai-agent` 等关键词在 github.com 搜索能命中 |
+
+---
+
 ## 系统约束
 
 - **生成需要联网**：generate.py 要访问 `raw.githubusercontent.com` 拿 README、`api.github.com` 拿元数据（offline 时元数据降级为"—"）、调 `claude -p` 时还要 `api.anthropic.com`

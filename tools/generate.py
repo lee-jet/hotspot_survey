@@ -35,7 +35,7 @@ import urllib.request
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from _common import REPORTS_DIR, attr  # noqa: E402
+from _common import REPORTS_DIR, attr, inject_seo, seo_block_report  # noqa: E402
 
 GH_URL_RE = re.compile(r"https?://github\.com/([\w.-]+)/([\w.-]+?)(?:\.git)?/?$")
 
@@ -594,6 +594,7 @@ def main(argv: list[str]) -> int:
                 "matrix_label": args.matrix_label,
             },
         )
+        html = inject_seo(html, seo_block_report(hub))
         out.write_text(html, encoding="utf-8")
         print(f"✓ Scaffold written: {out}")
         print("  → Fill in 5-段式 TODOs, then run merge.py")
@@ -639,6 +640,7 @@ def main(argv: list[str]) -> int:
         cover, theme, glyph,
         args.order, args.draft, readme_branch,
     )
+    html = inject_seo(html, seo_block_report(hub))
     out.write_text(html, encoding="utf-8")
     print(f"✓ Filled report written: {out}  ({len(html):,} bytes)")
     print()

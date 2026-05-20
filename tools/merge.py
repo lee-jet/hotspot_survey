@@ -21,10 +21,15 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from _common import (  # noqa: E402
     INDEX_PATH,
     REPORTS_DIR,
+    ROOT,
+    SITE_URL,
     attr,
     collect_reports,
     glyph_svg,
+    inject_seo,
     replace_region,
+    seo_block_index,
+    seo_block_report,
 )
 
 REQUIRED = (
@@ -199,6 +204,64 @@ def run_lint(reports: list[dict]) -> int:
     return 1 if total_e > 0 else 0
 
 
+def refresh_seo(reports: list[dict]) -> int:
+    """Refresh AUTO:seo block in index.html and every report. Returns #files changed."""
+    changed = 0
+    # Index
+    old = INDEX_PATH.read_text(encoding="utf-8")
+    new = inject_seo(old, seo_block_index())
+    if new != old:
+        INDEX_PATH.write_text(new, encoding="utf-8")
+        changed += 1
+    # Reports
+    for r in reports:
+        path = REPORTS_DIR / r["__filename"]
+        old = path.read_text(encoding="utf-8")
+        new = inject_seo(old, seo_block_report(r))
+        if new != old:
+            path.write_text(new, encoding="utf-8")
+            changed += 1
+    return changed
+
+
+def write_sitemap(reports: list[dict]) -> Path:
+    """Write sitemap.xml listing index + all published reports."""
+    from datetime import datetime, timezone
+    site = SITE_URL.rstrip("/")
+    sitemap_path = ROOT / "sitemap.xml"
+
+    def stat_iso(p: Path) -> str:
+        ts = p.stat().st_mtime
+        return datetime.fromtimestamp(ts, tz=timezone.utc).strftime("%Y-%m-%d")
+
+    urls = [
+        (f"{site}/", stat_iso(INDEX_PATH), "1.0", "weekly"),
+    ]
+    for r in reports:
+        path = REPORTS_DIR / r["__filename"]
+        urls.append((
+            f"{site}/reports/{r['__filename']}",
+            stat_iso(path),
+            "0.8",
+            "monthly",
+        ))
+
+    lines = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    ]
+    for loc, lastmod, priority, freq in urls:
+        lines.append("  <url>")
+        lines.append(f"    <loc>{loc}</loc>")
+        lines.append(f"    <lastmod>{lastmod}</lastmod>")
+        lines.append(f"    <changefreq>{freq}</changefreq>")
+        lines.append(f"    <priority>{priority}</priority>")
+        lines.append("  </url>")
+    lines.append("</urlset>")
+    sitemap_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    return sitemap_path
+
+
 def main(argv: list[str]) -> int:
     dry_run = "--dry-run" in argv
     check_only = "--check" in argv
@@ -230,6 +293,12 @@ def main(argv: list[str]) -> int:
 
     if old == new:
         print(f"= index.html already in sync ({len(reports)} reports)")
+        # Still refresh SEO + sitemap so they're up to date on every run
+        seo_changed = refresh_seo(reports)
+        if seo_changed:
+            print(f"✓ SEO block refreshed in {seo_changed} file(s)")
+        write_sitemap(reports)
+        print(f"✓ sitemap.xml regenerated ({len(reports) + 1} URLs)")
         return 0
 
     if dry_run:
@@ -248,6 +317,12 @@ def main(argv: list[str]) -> int:
         f"✓ Merged {len(reports)} reports into index.html "
         f"({sum(r['__sources'] for r in reports)} sources total)"
     )
+    # SEO refresh + sitemap (idempotent, only writes if changed)
+    seo_changed = refresh_seo(reports)
+    if seo_changed:
+        print(f"✓ SEO block refreshed in {seo_changed} file(s)")
+    sitemap = write_sitemap(reports)
+    print(f"✓ sitemap.xml regenerated ({len(reports) + 1} URLs)")
     return 0
 
 
