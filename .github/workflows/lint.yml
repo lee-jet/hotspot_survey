@@ -1,0 +1,41 @@
+name: Lint research hub
+
+on:
+  pull_request:
+    paths:
+      - 'reports/**'
+      - 'index.html'
+      - 'tools/**'
+  push:
+    branches: [main]
+    paths:
+      - 'reports/**'
+      - 'index.html'
+      - 'tools/**'
+  workflow_dispatch:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Validate hub:* meta completeness
+        run: python3 tools/merge.py --check
+
+      - name: Quality gate (sources >= 3, no TODO leftovers, link integrity)
+        run: python3 tools/merge.py --lint
+
+      - name: Detect drift (someone modified reports/ but forgot to merge)
+        run: |
+          python3 tools/merge.py
+          if ! git diff --quiet -- index.html; then
+            echo "::error::index.html is stale. Run 'python3 tools/merge.py' locally and commit."
+            git --no-pager diff -- index.html
+            exit 1
+          fi
+          echo "✓ index.html in sync with reports/."

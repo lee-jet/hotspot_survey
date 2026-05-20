@@ -3,19 +3,19 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Pre-indexed code knowledge graph for Claude Code, Codex, Cursor, and OpenCode — fewer tokens, fewer tool calls, 100% local · 调研报告</title>
+  <title>CodeGraph · 本地代码知识图谱 · 调研报告</title>
   <meta name="hub:slug" content="codegraph">
-  <meta name="hub:title" content="Pre-indexed code knowledge graph for Claude Code, Codex, Cursor, and OpenCode — fewer tokens, fewer tool calls, 100% local">
-  <meta name="hub:topic" content="工具">
-  <meta name="hub:summary" content="Pre-indexed code knowledge graph for Claude Code, Codex, Cursor, and OpenCode — fewer tokens, fewer tool calls, 100% local">
+  <meta name="hub:title" content="CodeGraph · 本地代码知识图谱">
+  <meta name="hub:topic" content="代码理解">
+  <meta name="hub:summary" content="为 Claude Code/Cursor/Codex/OpenCode 预建本地代码知识图谱，Explore agent 一次 MCP 调用即返回符号关系与源码片段，工具调用减少 94%、探索提速 77%。">
   <meta name="hub:cover" content="https://opengraph.githubassets.com/research-hub/colbymchenry/codegraph">
   <meta name="hub:theme" content="theme-ruview">
-  <meta name="hub:pills" content="工具|blue;TODO|amber">
-  <meta name="hub:glyph" content="tool">
-  <meta name="hub:order" content="99">
-  <meta name="hub:matrix-subject" content="工具">
-  <meta name="hub:matrix-question" content="codegraph 的核心能力、应用场景与风险边界。">
-  <meta name="hub:matrix-risk" content="TODO（供应链 / 凭据 / 注入 / 抓取合规）">
+  <meta name="hub:pills" content="Local-first|green;MCP|blue;Multi-Agent|violet">
+  <meta name="hub:glyph" content="file">
+  <meta name="hub:order" content="9">
+  <meta name="hub:matrix-subject" content="代码理解 / Agent 加速">
+  <meta name="hub:matrix-question" content="如何让 AI agent 用最少工具调用理解大型代码库？">
+  <meta name="hub:matrix-risk" content="主会话误调用、索引开销、图谱漂移">
   <meta name="hub:matrix-label" content="codegraph">
   <meta name="hub:status" content="published">
   <link rel="stylesheet" href="../assets/report.css">
@@ -28,6 +28,7 @@
         <a href="../index.html">总览</a>
         <a href="#summary">结论</a>
         <a href="#capabilities">能力</a>
+        <a href="#applications">应用</a>
         <a href="#risks">风险</a>
         <a href="#sources">来源</a>
       </nav>
@@ -38,16 +39,13 @@
     <section class="hero">
       <div class="shell hero-grid">
         <div>
-          <p class="eyebrow">工具 Research</p>
-          <h1>Pre-indexed code knowledge graph for Claude Code, Codex, Cursor, and OpenCode — fewer tokens, fewer tool calls, 100% local 调研报告</h1>
-          <p class="lead">Pre-indexed code knowledge graph for Claude Code, Codex, Cursor, and OpenCode — fewer tokens, fewer tool calls, 100% local</p>
-          <div class="pill-row">
-            <span class="pill blue">工具</span>
-            <span class="pill amber">TODO · 风险待补</span>
-          </div>
+          <p class="eyebrow">代码理解 Research</p>
+          <h1>CodeGraph · 本地代码知识图谱</h1>
+          <p class="lead">为 Claude Code/Cursor/Codex/OpenCode 预建本地代码知识图谱，Explore agent 一次 MCP 调用即返回符号关系与源码片段，工具调用减少 94%、探索提速 77%。</p>
+          <div class="pill-row"><span class="pill green">Local-first</span><span class="pill blue">MCP</span><span class="pill violet">Multi-Agent</span></div>
         </div>
         <figure class="hero-media">
-          <img src="https://opengraph.githubassets.com/research-hub/colbymchenry/codegraph" alt="Pre-indexed code knowledge graph for Claude Code, Codex, Cursor, and OpenCode — fewer tokens, fewer tool calls, 100% local preview" loading="lazy" onerror="this.style.display='none'">
+          <img src="https://opengraph.githubassets.com/research-hub/colbymchenry/codegraph" alt="CodeGraph · 本地代码知识图谱 preview" loading="lazy" onerror="this.style.display='none'">
           <figcaption class="caption">https://github.com/colbymchenry/codegraph</figcaption>
         </figure>
       </div>
@@ -59,16 +57,16 @@
         <div class="grid two">
           <div class="callout good">
             <h3>推荐基线</h3>
-            <p>TODO：用 1-2 句话说明在什么场景下推荐使用此工具。</p>
+            <p>在中大型代码库中使用 Claude Code/Cursor 等 AI agent 做架构探索、调用链追踪、影响分析时最划算，可显著降低 token 与轮次。</p>
           </div>
           <div class="callout warn">
-            <h3>补充场景 / 替代方案</h3>
-            <p>TODO：列出适合补充使用的相关工具或限制场景。</p>
+            <h3>补充场景 / 替代</h3>
+            <p>小项目或单文件改动直接用 grep/Read 即可，不必引入；首次索引超大仓库（如 Swift 编译器 25k 文件）需等待，跨仓库语义检索仍建议配合向量检索方案。</p>
           </div>
         </div>
         <div class="kpi-row">
-          <div class="kpi"><strong>6,824</strong><span>GitHub stars</span></div>
-          <div class="kpi"><strong>444</strong><span>forks</span></div>
+          <div class="kpi"><strong>6,835</strong><span>GitHub stars</span></div>
+          <div class="kpi"><strong>445</strong><span>forks</span></div>
           <div class="kpi"><strong>TypeScript</strong><span>主语言</span></div>
           <div class="kpi"><strong>MIT</strong><span>license</span></div>
         </div>
@@ -78,21 +76,28 @@
     <section id="capabilities" class="section">
       <div class="shell">
         <h2>2. 核心能力</h2>
-        <p class="muted">README 节选（待手工补全成正式结构）：</p>
-        <pre><code>&lt;div align=&quot;center&quot;&gt;
-
-# CodeGraph
-
-### Supercharge Claude Code, Cursor, Codex, and OpenCode with Semantic Code Intelligence
-
-**94% fewer tool calls · 77% faster exploration · 100% local**
-
-[![npm version](https://img.shields.io/npm/v/@colbymchenry/codegraph.svg)](https://www.npmjs.com/package/@colbymchenry/codegraph)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
-
-[![Windows](https://img.shields.io/badge/Windows-supported-blue.svg)](#)
-[![macOS](htt …</code></pre>
+        <div class="grid three">
+          <article class="card">
+            <h3>Smart Context</h3>
+            <p>一次调用返回入口点、相关符号与源码片段，省去多轮 Explore</p>
+          </article>
+          <article class="card">
+            <h3>全文检索</h3>
+            <p>基于 SQLite FTS5 的符号名瞬时搜索</p>
+          </article>
+          <article class="card">
+            <h3>影响分析</h3>
+            <p>追踪 callers/callees 与符号修改的影响半径</p>
+          </article>
+          <article class="card">
+            <h3>实时增量</h3>
+            <p>FSEvents/inotify 监听文件变更，防抖自动同步图谱</p>
+          </article>
+          <article class="card">
+            <h3>框架路由识别</h3>
+            <p>识别 Django/Flask/FastAPI/Express 等 13 个框架的路由到 handler 绑定</p>
+          </article>
+        </div>
       </div>
     </section>
 
@@ -100,9 +105,22 @@
       <div class="shell">
         <h2>3. 应用场景</h2>
         <div class="grid three">
-          <article class="card"><h3>场景一</h3><p>TODO</p></article>
-          <article class="card"><h3>场景二</h3><p>TODO</p></article>
-          <article class="card"><h3>场景三</h3><p>TODO</p></article>
+          <article class="card">
+            <h3>架构探索</h3>
+            <p>回答 &#x27;X 系统如何工作&#x27; 等跨文件问题，0 file reads</p>
+          </article>
+          <article class="card">
+            <h3>重构前评估</h3>
+            <p>修改前用 impact 查看符号波及范围</p>
+          </article>
+          <article class="card">
+            <h3>跨语言调用追踪</h3>
+            <p>在 Python+Rust、Swift+C++ 混合仓库中追溯调用链</p>
+          </article>
+          <article class="card">
+            <h3>Agent token 优化</h3>
+            <p>为 Explore subagent 提供预索引上下文，减少 90%+ 工具调用</p>
+          </article>
         </div>
       </div>
     </section>
@@ -111,8 +129,18 @@
       <div class="shell">
         <h2>4. 风险与缓解</h2>
         <div class="grid two">
-          <div class="callout risk"><h3>风险 1</h3><p>TODO</p></div>
-          <div class="callout warn"><h3>风险 2</h3><p>TODO</p></div>
+          <div class="callout warn">
+            <h3>主会话误用导致 context 爆炸</h3>
+            <p>codegraph_explore/context 返回大段源码，须在 subagent 中调用；官方文档已写明 Claude Code 主会话禁止直接调用</p>
+          </div>
+          <div class="callout warn">
+            <h3>首次索引耗时与磁盘开销</h3>
+            <p>大型仓库需数分钟构建 .codegraph/ SQLite，CI 环境需缓存或预热</p>
+          </div>
+          <div class="callout risk">
+            <h3>图谱与代码漂移</h3>
+            <p>虽有 watcher 自动同步，但 rebase/批量改名时仍可能短暂失真，关键操作前建议 codegraph_status 验证</p>
+          </div>
         </div>
       </div>
     </section>
@@ -122,16 +150,16 @@
         <h2>5. 参考来源</h2>
         <div class="sources">
           <a class="source-link" href="https://github.com/colbymchenry/codegraph">GitHub 仓库<span>colbymchenry/codegraph</span></a>
-          <a class="source-link" href="https://github.com/colbymchenry/codegraph/blob/main/README.md">README<span>main 分支</span></a>
+          <a class="source-link" href="https://github.com/colbymchenry/codegraph/blob/main/README.md">README (main)<span>源文档</span></a>
           <a class="source-link" href="https://github.com/colbymchenry/codegraph/releases">Releases<span>历史版本</span></a>
-          
+          <a class="source-link" href="https://www.npmjs.com/package/@colbymchenry/codegraph">npm package<span>安装与版本信息</span></a>
         </div>
       </div>
     </section>
   </main>
 
   <footer class="footer">
-    <div class="shell">脚手架由 tools/generate.py 生成，待手工或 LLM 补完五段式内容。</div>
+    <div class="shell">由 tools/generate.py 抓取 README 并通过 claude -p 综合而成。</div>
   </footer>
 </body>
 </html>
